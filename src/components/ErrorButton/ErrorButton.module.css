@@ -1,0 +1,8 @@
+.error-button {
+  padding: 5px;
+  font-size: 2rem;
+  width: 150px;
+  display: block;
+  background-color: pink;
+  margin: 0 auto 20px auto;
+}

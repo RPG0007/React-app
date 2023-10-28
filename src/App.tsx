@@ -2,7 +2,9 @@ import './App.css';
 import { Component } from 'react';
 import Seacrh from './components/Search/Search';
 import Card from './components/Card/Card';
+import Spinner from './components/Spinner';
 import ErrorBoundary from './components/ErrorBoundary';
+import ErrorButton from './components/ErrorButton/ErrorButton';
 
 interface IState {
   cards: Record<string, string>[];
@@ -70,9 +72,9 @@ export default class App extends Component {
           searchStringQuery={this.searchStringQuery}
           disabled={this.state.isLoading}
         ></Seacrh>
-
+        <ErrorButton />
         <div className="cards-wrapper">
-          {isLoading}
+          {isLoading && <Spinner />}
           {!isLoading &&
             (cards.length ? (
               cards.map((card) => (
