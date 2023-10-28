@@ -14,7 +14,9 @@ interface IState {
 
 export default class App extends Component {
   localStorageSearchValue: string | null = localStorage.getItem('queryString');
-  initSearchString: string = this.localStorageSearchValue ? this.localStorageSearchValue : '';
+  initSearchString: string = this.localStorageSearchValue
+    ? this.localStorageSearchValue
+    : '';
   arrayNumsFrom1To100: number[] = Array.from({ length: 100 }, (_, i) => i + 1);
 
   constructor(props: Record<string, never>) {
@@ -44,7 +46,9 @@ export default class App extends Component {
 
     fetch(
       `https://rickandmortyapi.com/api/character/${
-        stringQuery === '' ? `${this.arrayNumsFrom1To100}` : `?name=${stringQuery}`
+        stringQuery === ''
+          ? `${this.arrayNumsFrom1To100}`
+          : `?name=${stringQuery}`
       }`
     )
       .then((response) => response.json())
@@ -88,7 +92,9 @@ export default class App extends Component {
                 ></Card>
               ))
             ) : (
-              <h3 className="title">Unfortunately, no suitable result was found</h3>
+              <h3 className="title">
+                Unfortunately, no suitable result was found
+              </h3>
             ))}
         </div>
       </ErrorBoundary>

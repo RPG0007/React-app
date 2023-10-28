@@ -4,9 +4,9 @@ import { Component } from 'react';
 export default class ErrorButton extends Component {
   state = { hasError: false };
 
-  constructor(props: Record<string,never>){
-    super(props)
-    this.handlerClick= this.handlerClick.bind(this)
+  constructor(props: Record<string, never>) {
+    super(props);
+    this.handlerClick = this.handlerClick.bind(this);
   }
 
   handlerClick() {

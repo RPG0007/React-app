@@ -46,8 +46,16 @@ export default class Search extends Component<ISearchString> {
           onChange={this.handlerChange}
           onKeyUp={this.handlerKeyUp}
         ></input>
-        <button className={styles['search-button']} onClick={this.handlerClick} disabled={disabled}>
-          <img className={styles['search-icon']} src={searchIcon} alt="search icon"></img>
+        <button
+          className={styles['search-button']}
+          onClick={this.handlerClick}
+          disabled={disabled}
+        >
+          <img
+            className={styles['search-icon']}
+            src={searchIcon}
+            alt="search icon"
+          ></img>
         </button>
       </div>
     );
