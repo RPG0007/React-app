@@ -13,7 +13,7 @@ interface IState {
 }
 
 export default class App extends Component {
-  localStorageSearchValue: string | null = localStorage.getItem('queryString');
+  localStorageSearchValue: string | null = localStorage.getItem('savedSearch');
   initSearchString: string = this.localStorageSearchValue
     ? this.localStorageSearchValue
     : '';
@@ -21,8 +21,8 @@ export default class App extends Component {
 
   constructor(props: Record<string, never>) {
     super(props);
-    this.searchStringQuery = this.searchStringQuery.bind(this);
-    this.changeStateSearchString = this.changeStateSearchString.bind(this);
+    this.searchInput = this.searchInput.bind(this);
+    this.changeStateSearchInput = this.changeStateSearchInput.bind(this);
   }
 
   state: IState = {
@@ -31,18 +31,18 @@ export default class App extends Component {
     isLoading: true,
   };
 
-  changeStateSearchString(newSearchString: string) {
+  changeStateSearchInput(newSearchString: string) {
     const { isLoading, cards } = this.state;
     this.setState({ searchString: newSearchString, cards, isLoading });
   }
 
-  searchStringQuery(stringQuery: string) {
+  searchInput(stringQuery: string) {
     const { cards, searchString } = this.state;
 
     this.setState({ isLoading: true, cards, searchString });
 
     stringQuery = stringQuery.trim();
-    localStorage.setItem('queryString', stringQuery);
+    localStorage.setItem('savedSearch', stringQuery);
 
     fetch(
       `https://rickandmortyapi.com/api/character/${
@@ -63,7 +63,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.searchStringQuery(this.state.searchString);
+    this.searchInput(this.state.searchString);
   }
 
   render() {
@@ -72,8 +72,8 @@ export default class App extends Component {
       <ErrorBoundary>
         <Seacrh
           searchString={searchString}
-          setSearchString={this.changeStateSearchString}
-          searchStringQuery={this.searchStringQuery}
+          setSearchString={this.changeStateSearchInput}
+          searchStringQuery={this.searchInput}
           disabled={this.state.isLoading}
         ></Seacrh>
         <ErrorButton />
