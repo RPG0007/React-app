@@ -7,6 +7,11 @@
   justify-content: center;
   flex-direction: column;
 }
+
+body {
+  background-color: rgb(247, 215, 34, 0.5);
+}
+
 .cards-wrapper {
   display: flex;
   gap: 20px;
