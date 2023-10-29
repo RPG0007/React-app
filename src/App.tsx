@@ -92,9 +92,7 @@ export default class App extends Component {
                 ></Card>
               ))
             ) : (
-              <h3 className="title">
-                Unfortunately, no suitable result was found
-              </h3>
+              <h3 className="title">No suitable result was found</h3>
             ))}
         </div>
       </ErrorBoundary>

@@ -32,7 +32,7 @@ export default class ErrorBoundary extends Component<IProps, IState> {
     if (this.state.hasError) {
       return (
         <h2 className="title">
-          An unexpected error has occurred, please reload the page.
+          An expected error has occurred, please reload the page.
         </h2>
       );
     }
