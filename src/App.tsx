@@ -5,6 +5,7 @@ import Spinner from './components/Spinner';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorButton from './components/ErrorButton/ErrorButton';
 import { useEffect, useState } from 'react';
+import Pagination from './components/Pagination/Pagination';
 
 export default function App() {
   const localStorageSearchValue: string | null =
@@ -12,14 +13,14 @@ export default function App() {
   const initSearchString: string = localStorageSearchValue
     ? localStorageSearchValue
     : '';
-  const arrayNumsFrom1To100: number[] = Array.from(
-    { length: 100 },
-    (_, i) => i + 1
-  );
 
   const [cards, setCards] = useState<Record<string, string>[]>([]);
   const [searchString, setSearchString] = useState(initSearchString);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allPage, setAllPage] = useState(1);
+  const [linkPrevPage, setLinkPrevPage] = useState(null);
+  const [linkNextPage, setLinkNextPage] = useState(null);
 
   function searchStringQuery(stringQuery: string) {
     setIsLoading(true);
@@ -29,14 +30,58 @@ export default function App() {
 
     fetch(
       `https://rickandmortyapi.com/api/character/${
-        stringQuery === '' ? `${arrayNumsFrom1To100}` : `?name=${stringQuery}`
+        stringQuery === '' ? `` : `?name=${stringQuery}`
       }`
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Not found results');
+        } else {
+          return response.json();
+        }
+      })
       .then((data) => {
-        setCards(data.results ? data.results : data);
+        setCards(data.results);
         setSearchString(stringQuery);
         setIsLoading(false);
+        setCurrentPage(1);
+        setAllPage(data.info.pages);
+        setLinkPrevPage(data.info.prev);
+        setLinkNextPage(data.info.next);
+      })
+      .catch((error) => {
+        console.log(error);
+        setCards([]);
+        setIsLoading(false);
+      });
+  }
+
+  function goToNextPage() {
+    setIsLoading(true);
+
+    fetch(`${linkNextPage}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setCards(data.results);
+        setIsLoading(false);
+        setLinkPrevPage(data.info.prev);
+        setLinkNextPage(data.info.next);
+        setCurrentPage(currentPage + 1);
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function goToPrevPage() {
+    setIsLoading(true);
+
+    fetch(`${linkPrevPage}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setCards(data.results);
+        setIsLoading(false);
+        setLinkPrevPage(data.info.prev);
+        setLinkNextPage(data.info.next);
+        setCurrentPage(currentPage - 1);
       })
       .catch((error) => console.log(error));
   }
@@ -78,6 +123,14 @@ export default function App() {
             <h3 className="title">No suitable result was found</h3>
           ))}
       </div>
+      {!isLoading && Boolean(cards.length) && (
+        <Pagination
+          allPage={allPage}
+          currentPage={currentPage}
+          goToNextPage={goToNextPage}
+          goToPrevPage={goToPrevPage}
+        ></Pagination>
+      )}
     </ErrorBoundary>
   );
 }
