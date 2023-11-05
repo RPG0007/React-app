@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Outlet } from 'react-router-dom';
 import Seacrh from './components/Search/Search';
 import Card from './components/Card/Card';
 import Spinner from './components/Spinner';
@@ -8,6 +8,19 @@ import ErrorBoundary from './components/ErrorBoundary';
 import ErrorButton from './components/ErrorButton/ErrorButton';
 import Pagination from './components/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
+import ModalCard from './components/ModalCard/ModalCard';
+
+interface ICardDescription {
+  id: number;
+  name: string;
+  status: string;
+  species: string;
+  gender: string;
+  location: {
+    name: string;
+  };
+  image: string;
+}
 
 export default function App() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,6 +30,8 @@ export default function App() {
   const SearchPage: string | null = searchParams.get('page');
   const initSearchPage: string =
     SearchPage && +SearchPage > 0 ? SearchPage : '1';
+  const SearchCard: string | null = searchParams.get('card');
+  const initSearchCard: string = SearchCard ? SearchCard : '';
 
   const [searchString, setSearchString] = useState(initSearchString);
   const [currentPage, setCurrentPage] = useState(+initSearchPage);
@@ -25,6 +40,12 @@ export default function App() {
   const [allPage, setAllPage] = useState(1);
   const [linkPrevPage, setLinkPrevPage] = useState(null);
   const [linkNextPage, setLinkNextPage] = useState(null);
+
+  const [modalActive, setModalActive] = useState(false);
+  const [isModalLoading, setIsModalLoading] = useState(false);
+  const [cardDescription, setCardDescription] = useState<ICardDescription>(
+    {} as ICardDescription
+  );
 
   function initialSearch() {
     setIsLoading(true);
@@ -51,6 +72,12 @@ export default function App() {
         setAllPage(data.info.pages);
         setLinkPrevPage(data.info.prev);
         setLinkNextPage(data.info.next);
+      })
+      .then(() => {
+        if (initSearchCard) {
+          setModalActive(true);
+          getCardDescription(initSearchCard);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -124,8 +151,42 @@ export default function App() {
       .catch((error) => console.log(error));
   }
 
+  function getCardDescription(cardId: string) {
+    setIsModalLoading(true);
+    setSearchParams({
+      name: searchString,
+      page: `${currentPage}`,
+      card: `${cardId}`,
+    });
+
+    fetch(`https://rickandmortyapi.com/api/character/${cardId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Not found results');
+        } else {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        setIsModalLoading(false);
+        setCardDescription(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsModalLoading(false);
+        setCardDescription({} as ICardDescription);
+      });
+  }
+  function deleteCardStringQuery() {
+    setSearchParams({ name: searchString, page: `${currentPage}` });
+  }
+
   function changeStateSearchString(newSearchString: string) {
     setSearchString(newSearchString);
+  }
+
+  function changeStateModalActive(newState: boolean) {
+    setModalActive(newState);
   }
 
   function handlerUseEffect() {
@@ -160,12 +221,13 @@ export default function App() {
                         gender={card.gender}
                         status={card.status}
                         key={card.id}
+                        id={card.id}
+                        setModalActive={changeStateModalActive}
+                        getCardDescription={getCardDescription}
                       ></Card>
                     ))
                   ) : (
-                    <h3 className="title">
-                      Unfortunately, no suitable result was found
-                    </h3>
+                    <h3 className="title">No suitable result was found</h3>
                   ))}
               </div>
               {!isLoading && Boolean(cards.length) && (
@@ -176,9 +238,46 @@ export default function App() {
                   goToPrevPage={goToPrevPage}
                 ></Pagination>
               )}
+              {
+                <ModalCard
+                  modalActive={modalActive}
+                  setModalActive={changeStateModalActive}
+                  deleteCardStringQuery={deleteCardStringQuery}
+                >
+                  <Outlet />
+                </ModalCard>
+              }
             </>
           }
-        />
+        >
+          <Route
+            index
+            element={
+              <>
+                {isModalLoading && <Spinner />}
+                {!isModalLoading && (
+                  <>
+                    {cardDescription.id ? (
+                      <>
+                        <img
+                          src={cardDescription.image}
+                          alt="image character"
+                        ></img>
+                        <h4>{`name: ${cardDescription.name}`}</h4>
+                        <h4>{`status: ${cardDescription.status}`}</h4>
+                        <h4>{`species: ${cardDescription.species}`}</h4>
+                        <h4>{`gender: ${cardDescription.gender}`}</h4>
+                        <h4>{`location: ${cardDescription.location.name}`}</h4>
+                      </>
+                    ) : (
+                      <h4>character not found</h4>
+                    )}
+                  </>
+                )}
+              </>
+            }
+          ></Route>
+        </Route>
       </Routes>
     </ErrorBoundary>
   );

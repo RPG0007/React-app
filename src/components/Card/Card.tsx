@@ -6,6 +6,9 @@ interface ICardProps {
   species: string;
   gender: string;
   status: string;
+  id: string;
+  setModalActive(setState: boolean): void;
+  getCardDescription(id: string): void;
 }
 
 export default function Card({
@@ -14,9 +17,17 @@ export default function Card({
   species,
   gender,
   status,
+  id,
+  setModalActive,
+  getCardDescription,
 }: ICardProps) {
+  function handlerClick() {
+    setModalActive(true);
+    getCardDescription(id);
+  }
+
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={handlerClick}>
       <img src={img} alt="image character"></img>
       <h2>{name}</h2>
       <h4>{`species: ${species}`}</h4>
