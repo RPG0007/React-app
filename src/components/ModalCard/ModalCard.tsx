@@ -29,6 +29,9 @@ export default function ModalCard({
         className={modalActive ? 'modal-card modal-card-active' : 'modal-card'}
         onClick={handlerClickModalCard}
       >
+        <div className="modal-close-button" onClick={handlerClickModal}>
+          ❌
+        </div>
         <Outlet />
       </div>
     </div>
