@@ -1,5 +1,4 @@
 import styles from './Card.module.css';
-import { Component } from 'react';
 
 interface ICardProps {
   img: string;
@@ -9,19 +8,20 @@ interface ICardProps {
   status: string;
 }
 
-export default class Card extends Component<ICardProps> {
-  constructor(props: ICardProps) {
-    super(props);
-  }
-  render() {
-    return (
-      <div className={styles.card}>
-        <img src={this.props.img} alt="image character"></img>
-        <h2>{this.props.name}</h2>
-        <h4>{`species: ${this.props.species}`}</h4>
-        <h4>{`gender: ${this.props.gender}`}</h4>
-        <h4>{`status: ${this.props.status}`}</h4>
-      </div>
-    );
-  }
+export default function Card({
+  img,
+  name,
+  species,
+  gender,
+  status,
+}: ICardProps) {
+  return (
+    <div className={styles.card}>
+      <img src={img} alt="image character"></img>
+      <h2>{name}</h2>
+      <h4>{`species: ${species}`}</h4>
+      <h4>{`gender: ${gender}`}</h4>
+      <h4>{`status: ${status}`}</h4>
+    </div>
+  );
 }

@@ -1,101 +1,83 @@
 import './App.css';
-import { Component } from 'react';
 import Seacrh from './components/Search/Search';
 import Card from './components/Card/Card';
 import Spinner from './components/Spinner';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorButton from './components/ErrorButton/ErrorButton';
+import { useEffect, useState } from 'react';
 
-interface IState {
-  cards: Record<string, string>[];
-  searchString: string;
-  isLoading: boolean;
-}
-
-export default class App extends Component {
-  localStorageSearchValue: string | null = localStorage.getItem('savedSearch');
-  initSearchString: string = this.localStorageSearchValue
-    ? this.localStorageSearchValue
+export default function App() {
+  const localStorageSearchValue: string | null =
+    localStorage.getItem('queryString');
+  const initSearchString: string = localStorageSearchValue
+    ? localStorageSearchValue
     : '';
-  arrayNumsFrom1To100: number[] = Array.from({ length: 100 }, (_, i) => i + 1);
+  const arrayNumsFrom1To100: number[] = Array.from(
+    { length: 100 },
+    (_, i) => i + 1
+  );
 
-  constructor(props: Record<string, never>) {
-    super(props);
-    this.searchInput = this.searchInput.bind(this);
-    this.changeStateSearchInput = this.changeStateSearchInput.bind(this);
-  }
+  const [cards, setCards] = useState<Record<string, string>[]>([]);
+  const [searchString, setSearchString] = useState(initSearchString);
+  const [isLoading, setIsLoading] = useState(true);
 
-  state: IState = {
-    cards: [],
-    searchString: this.initSearchString,
-    isLoading: true,
-  };
-
-  changeStateSearchInput(newSearchString: string) {
-    const { isLoading, cards } = this.state;
-    this.setState({ searchString: newSearchString, cards, isLoading });
-  }
-
-  searchInput(stringQuery: string) {
-    const { cards, searchString } = this.state;
-
-    this.setState({ isLoading: true, cards, searchString });
+  function searchStringQuery(stringQuery: string) {
+    setIsLoading(true);
 
     stringQuery = stringQuery.trim();
-    localStorage.setItem('savedSearch', stringQuery);
+    localStorage.setItem('queryString', stringQuery);
 
     fetch(
       `https://rickandmortyapi.com/api/character/${
-        stringQuery === ''
-          ? `${this.arrayNumsFrom1To100}`
-          : `?name=${stringQuery}`
+        stringQuery === '' ? `${arrayNumsFrom1To100}` : `?name=${stringQuery}`
       }`
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({
-          cards: data.results ? data.results : data,
-          searchString: stringQuery,
-          isLoading: false,
-        });
+        setCards(data.results ? data.results : data);
+        setSearchString(stringQuery);
+        setIsLoading(false);
       })
       .catch((error) => console.log(error));
   }
 
-  componentDidMount() {
-    this.searchInput(this.state.searchString);
+  function changeStateSearchString(newSearchString: string) {
+    setSearchString(newSearchString);
   }
 
-  render() {
-    const { isLoading, cards, searchString } = this.state;
-    return (
-      <ErrorBoundary>
-        <Seacrh
-          searchString={searchString}
-          setSearchString={this.changeStateSearchInput}
-          searchStringQuery={this.searchInput}
-          disabled={this.state.isLoading}
-        ></Seacrh>
-        <ErrorButton />
-        <div className="cards-wrapper">
-          {isLoading && <Spinner />}
-          {!isLoading &&
-            (cards.length ? (
-              cards.map((card) => (
-                <Card
-                  img={card.image}
-                  name={card.name}
-                  species={card.species}
-                  gender={card.gender}
-                  status={card.status}
-                  key={card.id}
-                ></Card>
-              ))
-            ) : (
-              <h3 className="title">No suitable result was found</h3>
-            ))}
-        </div>
-      </ErrorBoundary>
-    );
+  function handlerUseEffect() {
+    searchStringQuery(searchString);
   }
+
+  useEffect(handlerUseEffect, []);
+
+  return (
+    <ErrorBoundary>
+      <Seacrh
+        searchString={searchString}
+        setSearchString={changeStateSearchString}
+        searchStringQuery={searchStringQuery}
+        disabled={isLoading}
+      ></Seacrh>
+      <ErrorButton />
+      <div className="cards-wrapper">
+        {isLoading && <Spinner />}
+        {!isLoading &&
+          (cards.length ? (
+            cards.map((card) => (
+              <Card
+                img={card.image}
+                name={card.name}
+                species={card.species}
+                gender={card.gender}
+                status={card.status}
+                key={card.id}
+              ></Card>
+            ))
+          ) : (
+            <h3 className="title">No suitable result was found</h3>
+          ))}
+      </div>
+    </ErrorBoundary>
+  );
 }
