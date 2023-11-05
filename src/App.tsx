@@ -38,6 +38,7 @@ export default function App() {
   const [cards, setCards] = useState<Record<string, string>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [allPage, setAllPage] = useState(1);
+  const [numPerPage, setPerPage] = useState(20);
   const [linkPrevPage, setLinkPrevPage] = useState(null);
   const [linkNextPage, setLinkNextPage] = useState(null);
 
@@ -46,6 +47,10 @@ export default function App() {
   const [cardDescription, setCardDescription] = useState<ICardDescription>(
     {} as ICardDescription
   );
+
+  function setPerPagecount(perpage: number) {
+    setPerPage(perpage);
+  }
 
   function initialSearch() {
     setIsLoading(true);
@@ -66,7 +71,7 @@ export default function App() {
         }
       })
       .then((data) => {
-        setCards(data.results);
+        setCards(data.results.slice(0, numPerPage));
         setIsLoading(false);
         setCurrentPage(+initSearchPage);
         setAllPage(data.info.pages);
@@ -104,7 +109,7 @@ export default function App() {
         }
       })
       .then((data) => {
-        setCards(data.results);
+        setCards(data.results.slice(0, numPerPage));
         setSearchString(stringQuery);
         setIsLoading(false);
         setCurrentPage(1);
@@ -122,13 +127,13 @@ export default function App() {
   function goToNextPage() {
     setIsLoading(true);
     setSearchParams({ name: searchString, page: `${currentPage + 1}` });
-
     fetch(`${linkNextPage}`)
       .then((response) => response.json())
       .then((data) => {
-        setCards(data.results);
+        setCards(data.results.slice(0, numPerPage));
         setIsLoading(false);
         setLinkPrevPage(data.info.prev);
+        setAllPage(data.info.pages);
         setLinkNextPage(data.info.next);
         setCurrentPage(currentPage + 1);
       })
@@ -138,12 +143,12 @@ export default function App() {
   function goToPrevPage() {
     setIsLoading(true);
     setSearchParams({ name: searchString, page: `${currentPage - 1}` });
-
     fetch(`${linkPrevPage}`)
       .then((response) => response.json())
       .then((data) => {
-        setCards(data.results);
+        setCards(data.results.slice(0, numPerPage));
         setIsLoading(false);
+        setAllPage(data.info.pages);
         setLinkPrevPage(data.info.prev);
         setLinkNextPage(data.info.next);
         setCurrentPage(currentPage - 1);
@@ -236,6 +241,9 @@ export default function App() {
                   currentPage={currentPage}
                   goToNextPage={goToNextPage}
                   goToPrevPage={goToPrevPage}
+                  handlePerPageChange={setPerPagecount}
+                  newSearch={newSearch}
+                  searchString={searchString}
                 ></Pagination>
               )}
               {

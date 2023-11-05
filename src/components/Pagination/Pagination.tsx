@@ -5,6 +5,9 @@ interface IPaginationProps {
   allPage: number | null;
   goToNextPage(): void;
   goToPrevPage(): void;
+  handlePerPageChange(perpage: number): void;
+  newSearch(searchString: string): void;
+  searchString: string;
 }
 
 export default function Pagination({
@@ -12,7 +15,17 @@ export default function Pagination({
   allPage,
   goToNextPage,
   goToPrevPage,
+  handlePerPageChange,
+  newSearch,
+  searchString,
 }: IPaginationProps) {
+  function handlePerPageChanges(event: React.ChangeEvent<HTMLInputElement>) {
+    handlePerPageChange(parseInt(event.target.value));
+  }
+
+  function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
+    return event.code === 'Enter' && newSearch(searchString);
+  }
   return (
     <div className="pagination-section">
       <button
@@ -36,6 +49,14 @@ export default function Pagination({
         onClick={goToNextPage}
         disabled={currentPage === allPage}
       >{`>`}</button>
+      <input
+        type="text"
+        className={'page-input'}
+        max={20}
+        placeholder="max 20 per page"
+        onChange={handlePerPageChanges}
+        onKeyUp={handlerKeyUp}
+      ></input>
     </div>
   );
 }
