@@ -2,14 +2,14 @@
   width: 200px;
   padding-bottom: 10px;
   min-height: 200px;
-  border: 1px solid silver;
+  border: 3px solid rgb(24, 199, 161);
   border-radius: 8px;
   transition: 0.5s all;
   cursor: pointer;
 }
 .card:hover {
   scale: 1.05;
-  box-shadow: 0 0 10px silver;
+  box-shadow: 0 0 10px rgb(24, 199, 161);
 }
 .card h2 {
   padding: 10px;
