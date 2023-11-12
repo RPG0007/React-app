@@ -41,6 +41,8 @@ const renderPagination = (currentPage: number) => {
           currentPage={currentPage}
           linkPrevPage={''}
           linkNextPage={''}
+          handlePerPageChange={mockFn}
+          numPerPage={20}
         />
       </Context.Provider>
     </BrowserRouter>
