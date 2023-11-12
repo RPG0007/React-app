@@ -1,0 +1,11 @@
+.cards-wrapper {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2.8rem;
+}

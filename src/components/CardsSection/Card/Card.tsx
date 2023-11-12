@@ -1,15 +1,7 @@
 import styles from './Card.module.css';
-
-interface ICardProps {
-  img: string;
-  name: string;
-  species: string;
-  gender: string;
-  status: string;
-  id: string;
-  setModalActive(setState: boolean): void;
-  getCardDescription(id: string): void;
-}
+import { ICardProps } from '../../../types/interfaces';
+import { useContext } from 'react';
+import { Context } from '../../../context/context';
 
 export default function Card({
   img,
@@ -18,16 +10,16 @@ export default function Card({
   gender,
   status,
   id,
-  setModalActive,
-  getCardDescription,
+  getCardModalDescription,
 }: ICardProps) {
+  const { setModalActive } = useContext(Context);
   function handlerClick() {
     setModalActive(true);
-    getCardDescription(id);
+    getCardModalDescription(id);
   }
 
   return (
-    <div className={styles.card} onClick={handlerClick}>
+    <div className={styles.card} onClick={handlerClick} data-testid="card">
       <img src={img} alt="image character"></img>
       <h2>{name}</h2>
       <h4>{`species: ${species}`}</h4>

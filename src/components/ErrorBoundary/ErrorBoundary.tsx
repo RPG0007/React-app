@@ -1,17 +1,14 @@
 import { Component, ErrorInfo } from 'react';
+import {
+  IErrorBoundaryProps,
+  IErrorBoundaryState,
+} from '../../types/interfaces';
 
-interface IProps {
-  children?: React.ReactNode;
-}
-
-interface IState {
-  hasError: boolean;
-  error: null | Error;
-  errorInfo: null | ErrorInfo;
-}
-
-export default class ErrorBoundary extends Component<IProps, IState> {
-  constructor(props: IProps) {
+export default class ErrorBoundary extends Component<
+  IErrorBoundaryProps,
+  IErrorBoundaryState
+> {
+  constructor(props: IErrorBoundaryProps) {
     super(props);
     this.state = {
       hasError: false,
@@ -32,7 +29,7 @@ export default class ErrorBoundary extends Component<IProps, IState> {
     if (this.state.hasError) {
       return (
         <h2 className="title">
-          An expected error has occurred, please reload the page.
+          An unexpected error has occurred, please reload the page.
         </h2>
       );
     }

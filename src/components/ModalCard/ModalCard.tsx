@@ -1,25 +1,24 @@
 import './ModalCard.css';
-import { Outlet } from 'react-router-dom';
-
-interface IModalCardProps {
-  modalActive: boolean;
-  setModalActive(newState: boolean): void;
-  deleteCardStringQuery(): void;
-  children: React.ReactNode;
-}
+import ModalCardContent from './ModalCardContent/ModalCardContent';
+import { IModalCardProps } from '../../types/interfaces';
+import { useContext } from 'react';
+import { Context } from '../../context/context';
 
 export default function ModalCard({
   modalActive,
-  setModalActive,
+  isModalLoading,
   deleteCardStringQuery,
 }: IModalCardProps) {
+  const { setModalActive } = useContext(Context);
   function handlerClickModal() {
     setModalActive(false);
     deleteCardStringQuery();
   }
+
   function handlerClickModalCard(event: React.MouseEvent) {
     event.stopPropagation();
   }
+
   return (
     <div
       className={modalActive ? 'modal modal-active' : 'modal'}
@@ -29,10 +28,14 @@ export default function ModalCard({
         className={modalActive ? 'modal-card modal-card-active' : 'modal-card'}
         onClick={handlerClickModalCard}
       >
-        <div className="modal-close-button" onClick={handlerClickModal}>
+        <div
+          className="modal-close-button"
+          onClick={handlerClickModal}
+          data-testid="modal-close"
+        >
           ❌
         </div>
-        <Outlet />
+        <ModalCardContent isModalLoading={isModalLoading} />
       </div>
     </div>
   );

@@ -1,21 +1,51 @@
-import './CardSection.css';
-import { Context } from '../../context';
-import { useContext } from 'react';
-import Spinner from '../../components/Spinner';
-import Card from '../../components/Card/Card';
-
-interface ICardsSectionProps {
-  isLoading: boolean;
-  changeStateModalActive(newState: boolean): void;
-  getCardDescription(cardId: string): void;
-}
-
+import { Context } from '../../context/context';
+import { useContext, useEffect } from 'react';
+import Spinner from '../Spinner/Spinner';
+import Card from './Card/Card';
+import NoResultsCards from './NoResultsCards/NoResultsCards';
+import { ICardsSectionProps } from '../../types/interfaces';
+import { useSearchParams } from 'react-router-dom';
+import * as constants from '../../constants/constants';
 export default function CardsSection({
   isLoading,
-  changeStateModalActive,
-  getCardDescription,
+  currentPage,
 }: ICardsSectionProps) {
-  const { cards } = useContext(Context);
+  const {
+    cards,
+    searchString,
+    setIsModalLoading,
+    setCardDescription,
+    setModalActive,
+  } = useContext(Context);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const SearchCard: string | null = searchParams.get('card');
+  const initSearchCard: string = SearchCard ? SearchCard : '';
+
+  const getCardModalDescription = async (cardId: string) => {
+    setIsModalLoading(true);
+    setSearchParams({
+      name: searchString,
+      page: `${currentPage}`,
+      card: `${cardId}`,
+    });
+    try {
+      const response = await fetch(`${constants.BASE_URL}${cardId}`);
+      const data = await response.json();
+      setIsModalLoading(false);
+      setCardDescription(data);
+    } catch (error) {
+      console.log(error);
+      setIsModalLoading(false);
+      setCardDescription(null);
+    }
+  };
+
+  useEffect(() => {
+    if (initSearchCard) {
+      setModalActive(true);
+      getCardModalDescription(initSearchCard);
+    }
+  }, []);
 
   return (
     <div className="cards-wrapper">
@@ -31,12 +61,11 @@ export default function CardsSection({
               status={card.status}
               key={card.id}
               id={card.id}
-              setModalActive={changeStateModalActive}
-              getCardDescription={getCardDescription}
-            ></Card>
+              getCardModalDescription={getCardModalDescription}
+            />
           ))
         ) : (
-          <h3 className="title">Unfortunately, no suitable result was found</h3>
+          <NoResultsCards></NoResultsCards>
         ))}
     </div>
   );

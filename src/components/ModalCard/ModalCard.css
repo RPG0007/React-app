@@ -18,11 +18,10 @@
 }
 
 .modal-card {
-  margin-left: 500px;
   width: 500px;
   border-radius: 15px;
   padding: 20px;
-  background-color: rgb(24, 199, 161);
+  background-color: #ffaeeb;
   transform: scale(0.5);
   transition: all 0.4s;
   text-align: start;
@@ -46,10 +45,6 @@
   color: red;
   position: fixed;
   top: 0px;
-  right: 10px;
+  right: -40px;
   cursor: pointer;
-}
-
-.modal-close-button:hover {
-  scale: 1.2;
 }
