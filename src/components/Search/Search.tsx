@@ -1,19 +1,21 @@
 import styles from './Search.module.css';
 import searchIcon from '../../assets/search.png';
+import { Context } from '../../context';
+import { useContext } from 'react';
 
 interface ISearchString {
-  searchString: string;
   setSearchString(searchString: string): void;
   newSearch(searchString: string): void;
   disabled: boolean;
 }
 
 export default function Search({
-  searchString,
   setSearchString,
   newSearch,
   disabled,
 }: ISearchString) {
+  const { searchString } = useContext(Context);
+
   function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
     return event.code === 'Enter' && newSearch(searchString);
   }
