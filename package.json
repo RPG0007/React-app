@@ -11,7 +11,9 @@
     "format:fix": "prettier . --write && git add -A",
     "preview": "vite preview",
     "prepare": "husky install",
-    "test": "vitest"
+    "test": "vitest",
+    "test:once": "vitest --run",
+    "coverage": "vitest run --coverage.enabled --coverage.all"
   },
   "dependencies": {
     "react": "^18.2.0",
