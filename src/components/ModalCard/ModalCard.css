@@ -21,7 +21,7 @@
   width: 500px;
   border-radius: 15px;
   padding: 20px;
-  background-color: #ffaeeb;
+  background-color: rgb(24, 199, 161);
   transform: scale(0.5);
   transition: all 0.4s;
   text-align: start;

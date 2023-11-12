@@ -44,6 +44,8 @@ export interface IPaginationProps {
   allPage: number | null;
   linkPrevPage: string;
   linkNextPage: string;
+  handlePerPageChange(page: number): void;
+  numPerPage: number;
 }
 
 export interface ISearchProps {

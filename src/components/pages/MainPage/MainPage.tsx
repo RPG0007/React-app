@@ -21,7 +21,7 @@ export default function MainPage() {
   const initSearchPage: string =
     SearchPage && +SearchPage > 0 ? SearchPage : '1';
   const [currentPage, setCurrentPage] = useState(+initSearchPage);
-
+  const [numPerPage, setPerPage] = useState(20);
   const [cards, setCards] = useState<ICards>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,6 +34,9 @@ export default function MainPage() {
   const [modalActive, setModalActive] = useState(false);
   const [isModalLoading, setIsModalLoading] = useState(false);
 
+  function setPerPagecount(perpage: number) {
+    setPerPage(perpage);
+  }
   const deleteCardStringQuery = () => {
     setSearchParams({ name: searchString, page: `${currentPage}` });
   };
@@ -52,7 +55,7 @@ export default function MainPage() {
         );
         const data = await response.json();
 
-        setCards(data.results);
+        setCards(data.results.slice(0, numPerPage));
         setIsLoading(false);
         setCurrentPage(+initSearchPage);
         setAllPage(data.info.pages);
@@ -95,6 +98,8 @@ export default function MainPage() {
           currentPage={currentPage}
           linkPrevPage={linkPrevPage}
           linkNextPage={linkNextPage}
+          handlePerPageChange={setPerPagecount}
+          numPerPage={numPerPage}
         />
       )}
       <ModalCard
