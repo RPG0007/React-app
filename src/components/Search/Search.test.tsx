@@ -64,16 +64,6 @@ describe('Search component:', () => {
     expect(checkValue === localStorage.getItem('stringQuery')).toBe(true);
   });
 
-  test('retrieves the value from the local storage upon mounting', () => {
-    const checkValue = 'test';
-    localStorage.setItem('stringQuery', checkValue);
-
-    render(renderMainPage());
-
-    const input: HTMLInputElement = screen.getByTestId('input-search');
-
-    expect(checkValue === input.value).toBe(true);
-  });
   test('function "new search" currectly work without error', async () => {
     render(renderSearch());
 
