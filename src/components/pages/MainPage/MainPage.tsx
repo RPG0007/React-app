@@ -13,7 +13,7 @@ import * as constants from '../../../constants/constants';
 export default function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const SearchValue: string | null = localStorage.getItem('stringQuery');
+  const SearchValue: string | null = searchParams.get('name');
   const initSearchString: string = SearchValue ? SearchValue : '';
   const [searchString, setSearchString] = useState(initSearchString);
 

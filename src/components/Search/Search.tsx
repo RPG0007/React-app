@@ -21,7 +21,6 @@ export default function Search({ disabled }: ISearchProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const newSearch = async (stringQuery: string) => {
-    localStorage.setItem('stringQuery', stringQuery);
     setIsLoading(true);
     stringQuery = stringQuery.trim();
     setSearchParams({ name: stringQuery, page: `1` });
