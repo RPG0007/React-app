@@ -3,13 +3,13 @@ import Spinner from '../Spinner/Spinner';
 import Card from './Card/Card';
 import NoResultsCards from './NoResultsCards/NoResultsCards';
 import { useSearchParams } from 'react-router-dom';
-import { BASE_URL } from '../../constants/constants';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   changeCardDescription,
   changeIsModalActive,
   changeIsModalLoading,
 } from '../../store/mainPageSlice';
+import { useLazyGetCardDesctiptionQuery } from '../../store/api';
 export default function CardsSection() {
   const [searchParams] = useSearchParams();
 
@@ -24,31 +24,30 @@ export default function CardsSection() {
 
   const cards = useAppSelector((state) => state.mainPage.cards);
 
+  const [triggerFn] = useLazyGetCardDesctiptionQuery();
+
   const getCardModalDescription = async (cardId: string) => {
     dispatch(changeIsModalActive(true));
     dispatch(changeIsModalLoading(true));
 
     try {
-      const response = await fetch(`${BASE_URL}${cardId}`);
-      const data = await response.json();
+      const response = await triggerFn(cardId);
 
       dispatch(changeIsModalLoading(false));
-      dispatch(changeCardDescription(data));
+      dispatch(changeCardDescription(response.data));
     } catch (error) {
       console.log(error);
       dispatch(changeIsModalLoading(false));
-      dispatch(changeCardDescription(null));
+      dispatch(changeCardDescription(undefined));
     }
   };
+
   useEffect(() => {
-    const initialGetCardDescription = () => {
-      if (initSearchCard) {
-        getCardModalDescription(initSearchCard);
-      } else {
-        dispatch(changeIsModalActive(false));
-      }
-    };
-    initialGetCardDescription();
+    if (initSearchCard) {
+      getCardModalDescription(initSearchCard);
+    } else {
+      dispatch(changeIsModalActive(false));
+    }
   }, [initSearchCard]);
 
   return (

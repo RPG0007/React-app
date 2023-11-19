@@ -12,7 +12,6 @@ export default function Search({ disabled }: ISearch) {
   const searchString = useAppSelector((state) => state.mainPage.searchString);
 
   const actionOnNewSearch = () => {
-    dispatch(changeSearchString(searchString.trim()));
     setSearchParams({
       name: searchString.trim(),
       page: '1',

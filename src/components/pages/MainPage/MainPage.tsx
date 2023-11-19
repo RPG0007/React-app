@@ -32,11 +32,10 @@ export default function MainPage() {
   const isCardsLoading = useAppSelector(
     (state) => state.mainPage.isCardsLoading
   );
-  const searchString = useAppSelector((state) => state.mainPage.searchString);
 
   const deleteCardStringQuery = useCallback(() => {
-    setSearchParams({ name: searchString, page: `${initSearchPage}` });
-  }, [initSearchPage, searchString]);
+    setSearchParams({ name: initSearchString, page: `${initSearchPage}` });
+  }, [initSearchPage, initSearchString]);
 
   const queryString = `${
     initSearchString
@@ -59,7 +58,7 @@ export default function MainPage() {
     } else {
       dispatch(changeCurrentCards([]));
     }
-  }, [initSearchString, initSearchPage, currentData, numPerpage]);
+  }, [initSearchString, currentData, numPerpage]);
 
   return (
     <>

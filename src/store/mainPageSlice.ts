@@ -4,25 +4,23 @@ import { Cards, ICardDescription } from '../types/interfaces';
 
 interface IMainPageState {
   cards: Cards;
-  cardDescription: ICardDescription | null;
+  cardDescription: ICardDescription | undefined;
   isCardsLoading: boolean;
   isModalActive: boolean;
   isModalLoading: boolean;
   searchString: string;
   allPage: number;
-  cardDescriptionId: string;
   numPerpage: number;
 }
 
 const initialState: IMainPageState = {
   cards: [],
-  cardDescription: null,
+  cardDescription: undefined,
   isCardsLoading: true,
   isModalActive: false,
   isModalLoading: false,
   searchString: '',
   allPage: 1,
-  cardDescriptionId: '',
   numPerpage: 20,
 };
 
@@ -35,7 +33,7 @@ export const mainPageSlice = createSlice({
     },
     changeCardDescription: (
       state,
-      action: PayloadAction<ICardDescription | null>
+      action: PayloadAction<ICardDescription | undefined>
     ) => {
       state.cardDescription = action.payload;
     },
@@ -50,9 +48,6 @@ export const mainPageSlice = createSlice({
     },
     changeSearchString: (state, action: PayloadAction<string>) => {
       state.searchString = action.payload;
-    },
-    changeCardDescriptionId: (state, action: PayloadAction<string>) => {
-      state.cardDescriptionId = action.payload;
     },
     changeAllPage: (state, action: PayloadAction<number>) => {
       state.allPage = action.payload;
@@ -71,7 +66,6 @@ export const {
   changeIsModalActive,
   changeSearchString,
   changeAllPage,
-  changeCardDescriptionId,
   changenumPerpage,
 } = mainPageSlice.actions;
 

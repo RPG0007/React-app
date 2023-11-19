@@ -1,7 +1,6 @@
 import styles from './Card.module.css';
 import { ICard } from '../../../types/interfaces';
 import { useSearchParams } from 'react-router-dom';
-import { useAppSelector } from '../../../store/hooks';
 
 export default function Card({
   img,
@@ -12,15 +11,20 @@ export default function Card({
   id,
   getCardModalDescription,
 }: ICard) {
-  const [, setSearchParams] = useSearchParams();
-  const searchString = useAppSelector((state) => state.mainPage.searchString);
-  const currentPage = useAppSelector((state) => state.mainPage.currentPage);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const queryStringSearch: string | null = searchParams.get('name');
+  const initSearchString: string = queryStringSearch ? queryStringSearch : '';
+
+  const queryStringPage: string | null = searchParams.get('page');
+  const initSearchPage: number =
+    queryStringPage && +queryStringPage > 0 ? +queryStringPage : 1;
 
   function handlerClick() {
     getCardModalDescription(id);
     setSearchParams({
-      name: searchString,
-      page: `${currentPage}`,
+      name: initSearchString,
+      page: `${initSearchPage}`,
       card: `${id}`,
     });
   }
