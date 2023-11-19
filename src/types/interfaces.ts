@@ -41,3 +41,13 @@ export interface IErrorBoundaryState {
   error: null | Error;
   errorInfo: null | ErrorInfo;
 }
+
+export interface IResponseApi {
+  info: {
+    count: number;
+    next: string | null;
+    pages: number;
+    prev: string | null;
+  };
+  results: Cards;
+}
