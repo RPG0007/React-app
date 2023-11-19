@@ -1,13 +1,15 @@
 import './ModalCardContent.css';
 import Spinner from '../../Spinner/Spinner';
-import { Context } from '../../../context/context';
-import { useContext } from 'react';
-import { IModalCardContetnt } from '../../../types/interfaces';
+import { useAppSelector } from '../../../store/hooks';
 
-export default function ModalCardContent({
-  isModalLoading,
-}: IModalCardContetnt) {
-  const { cardDescription } = useContext(Context);
+export default function ModalCardContent() {
+  const cardDescription = useAppSelector(
+    (state) => state.mainPage.cardDescription
+  );
+
+  const isModalLoading = useAppSelector(
+    (state) => state.mainPage.isModalLoading
+  );
 
   return (
     <>

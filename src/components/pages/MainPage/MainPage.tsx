@@ -4,54 +4,40 @@ import CardsSection from '../../CardsSection/CardsSection';
 import ErrorButton from '../../ErrorBoundary/ErrorButton/ErrorButton';
 import Pagination from '../../Pagination/Pagination';
 import Seacrh from '../../Search/Search';
-import { Context } from '../../../context/context';
 import { useSearchParams } from 'react-router-dom';
-import { useState, useEffect, useCallback } from 'react';
-import {
-  ICardDescription,
-  ClickedButtonFuturePage,
-} from '../../../types/interfaces';
+import { useEffect, useCallback } from 'react';
 import { BASE_URL } from '../../../constants/constants';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  changeCurrentPageCards,
+  changeCurrentPage,
+  changeCurrentCards,
   changeIsCardsLoading,
   changeSearchString,
-} from '../../../store/cardsSlice';
+  changeAllPage,
+} from '../../../store/mainPageSlice';
 
 export default function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const cards = useAppSelector((state) => state.cards.cards);
-  const isCardsLoading = useAppSelector((state) => state.cards.isCardsLoading);
-  const searchString = useAppSelector((state) => state.cards.searchString);
-  const isNewSearchCalled = useAppSelector(
-    (state) => state.cards.isNewSearchCalled
-  );
-
   const dispatch = useAppDispatch();
-  //const changeCards = (cards: Cards) => dispatch(changeCurrentPageCards(cards));
 
-  const searchValue: string | null = searchParams.get('name');
-  const initSearchString: string = searchValue ? searchValue : '';
+  const queryStringSearch: string | null = searchParams.get('name');
+  const initSearchString: string = queryStringSearch ? queryStringSearch : '';
 
-  const searchPage: string | null = searchParams.get('page');
-  const initSearchPage: string =
-    searchPage && +searchPage > 0 ? searchPage : '1';
-  const [currentPage, setCurrentPage] = useState(+initSearchPage);
-  const [numPerPage, setPerPage] = useState(20);
+  const queryStringPage: string | null = searchParams.get('page');
+  const initSearchPage: number =
+    queryStringPage && +queryStringPage > 0 ? +queryStringPage : 1;
 
-  const [allPage, setAllPage] = useState(1);
-  const [linkPrevPage, setLinkPrevPage] = useState('');
-  const [linkNextPage, setLinkNextPage] = useState('');
-
-  const [cardDescription, setCardDescription] =
-    useState<ICardDescription | null>(null);
-  const [modalActive, setModalActive] = useState(false);
-  const [isModalLoading, setIsModalLoading] = useState(false);
-
-  const [clickedButtonFuturePage, setClickedButtonFuturePage] =
-    useState<ClickedButtonFuturePage>('');
+  const cards = useAppSelector((state) => state.mainPage.cards);
+  const numPerpage = useAppSelector((state) => state.mainPage.numPerpage);
+  const isCardsLoading = useAppSelector(
+    (state) => state.mainPage.isCardsLoading
+  );
+  const searchString = useAppSelector((state) => state.mainPage.searchString);
+  const isNewSearchCalled = useAppSelector(
+    (state) => state.mainPage.isNewSearchCalled
+  );
+  const currentPage = useAppSelector((state) => state.mainPage.currentPage);
 
   const deleteCardStringQuery = useCallback(() => {
     setSearchParams({ name: searchString, page: `${currentPage}` });
@@ -59,49 +45,32 @@ export default function MainPage() {
 
   useEffect(() => {
     const initialSearch = async () => {
-      //
-      //setIsLoading(true);
-      dispatch(changeIsCardsLoading(true));
-      //setSearchString(initSearchString);
-      dispatch(changeSearchString(initSearchString));
-
-      //
-
-      setCurrentPage(+initSearchPage);
-
       const searchStringTrimed = initSearchString.trim();
 
-      let futureLinkPage: string = `${BASE_URL}${
+      dispatch(changeIsCardsLoading(true));
+      dispatch(changeSearchString(searchStringTrimed));
+      dispatch(changeCurrentPage(initSearchPage));
+
+      const queryString = `${
         searchString
-          ? `?name=${searchStringTrimed}&page=${currentPage}`
-          : `?page=${currentPage}`
+          ? `?name=${searchStringTrimed}&page=${initSearchPage}`
+          : `?page=${initSearchPage}`
       }`;
 
-      if (clickedButtonFuturePage === 'next') futureLinkPage = linkNextPage;
-      if (clickedButtonFuturePage === 'prev') futureLinkPage = linkPrevPage;
+      const nextLinkPage: string = `${BASE_URL}${queryString}`;
 
       try {
-        const response = await fetch(futureLinkPage);
+        const response = await fetch(nextLinkPage);
         const data = await response.json();
 
-        // REDUX
-        //setCards(data.results);
-        dispatch(changeCurrentPageCards(data.results.slice(0, numPerPage)));
-        //setIsLoading(false);
+        dispatch(changeCurrentCards(data.results.slice(0, numPerpage)));
         dispatch(changeIsCardsLoading(false));
-        //setSearchString(searchStringTrimed);
         dispatch(changeSearchString(searchStringTrimed));
-        //
-
-        setAllPage(data.info.pages);
-        setLinkPrevPage(data.info.prev);
-        setLinkNextPage(data.info.next);
+        dispatch(changeAllPage(data.info.pages));
       } catch (error) {
         console.log(error);
-        dispatch(changeCurrentPageCards([]));
-        //setCards([]);
+        dispatch(changeCurrentCards([]));
         dispatch(changeIsCardsLoading(false));
-        //setIsLoading(false);
       }
     };
 
@@ -111,48 +80,16 @@ export default function MainPage() {
     isNewSearchCalled,
     initSearchString,
     initSearchPage,
-    numPerPage,
+    numPerpage,
   ]);
 
   return (
-    <Context.Provider
-      value={{
-        cards,
-        searchString,
-        cardDescription,
-        //setIsLoading,
-        changeIsCardsLoading,
-        //setCards,
-
-        setCurrentPage,
-        setAllPage,
-        setLinkNextPage,
-        setLinkPrevPage,
-        setIsModalLoading,
-        setCardDescription,
-        setModalActive,
-        //setSearchString,
-        setClickedButtonFuturePage,
-        //setIsNewSearchCalled,
-      }}
-    >
+    <>
       <Seacrh disabled={isCardsLoading}></Seacrh>
       <ErrorButton />
-      <CardsSection isLoading={isCardsLoading} currentPage={currentPage} />
-      {!isCardsLoading && Boolean(cards.length) && (
-        <Pagination
-          allPage={allPage}
-          currentPage={currentPage}
-          linkPrevPage={linkPrevPage}
-          linkNextPage={linkNextPage}
-          setPerpage={setPerPage}
-        />
-      )}
-      <ModalCard
-        modalActive={modalActive}
-        isModalLoading={isModalLoading}
-        deleteCardStringQuery={deleteCardStringQuery}
-      />
-    </Context.Provider>
+      <CardsSection />
+      {!isCardsLoading && Boolean(cards.length) && <Pagination />}
+      <ModalCard deleteCardStringQuery={deleteCardStringQuery} />
+    </>
   );
 }

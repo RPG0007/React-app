@@ -1,7 +1,7 @@
 import styles from './Card.module.css';
 import { ICard } from '../../../types/interfaces';
-import { useContext } from 'react';
-import { Context } from '../../../context/context';
+import { useSearchParams } from 'react-router-dom';
+import { useAppSelector } from '../../../store/hooks';
 
 export default function Card({
   img,
@@ -12,10 +12,17 @@ export default function Card({
   id,
   getCardModalDescription,
 }: ICard) {
-  const { setModalActive } = useContext(Context);
+  const [, setSearchParams] = useSearchParams();
+  const searchString = useAppSelector((state) => state.mainPage.searchString);
+  const currentPage = useAppSelector((state) => state.mainPage.currentPage);
+
   function handlerClick() {
-    setModalActive(true);
     getCardModalDescription(id);
+    setSearchParams({
+      name: searchString,
+      page: `${currentPage}`,
+      card: `${id}`,
+    });
   }
 
   return (

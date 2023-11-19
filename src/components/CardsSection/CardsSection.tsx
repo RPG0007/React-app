@@ -1,61 +1,60 @@
-import { Context } from '../../context/context';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import Spinner from '../Spinner/Spinner';
 import Card from './Card/Card';
 import NoResultsCards from './NoResultsCards/NoResultsCards';
-import { ICardsSection } from '../../types/interfaces';
 import { useSearchParams } from 'react-router-dom';
-import * as constants from '../../constants/constants';
-export default function CardsSection({
-  isLoading,
-  currentPage,
-}: ICardsSection) {
-  const {
-    cards,
-    searchString,
-    setIsModalLoading,
-    setCardDescription,
-    setModalActive,
-  } = useContext(Context);
+import { BASE_URL } from '../../constants/constants';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  changeCardDescription,
+  changeIsModalActive,
+  changeIsModalLoading,
+} from '../../store/mainPageSlice';
+export default function CardsSection() {
+  const [searchParams] = useSearchParams();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const SearchCard: string | null = searchParams.get('card');
-  const initSearchCard: string = SearchCard ? SearchCard : '';
+  const queryStringCard: string | null = searchParams.get('card');
+  const initSearchCard: string = queryStringCard ? queryStringCard : '';
+
+  const dispatch = useAppDispatch();
+
+  const isCardsLoading = useAppSelector(
+    (state) => state.mainPage.isCardsLoading
+  );
+
+  const cards = useAppSelector((state) => state.mainPage.cards);
 
   const getCardModalDescription = async (cardId: string) => {
-    setIsModalLoading(true);
-    setSearchParams({
-      name: searchString,
-      page: `${currentPage}`,
-      card: `${cardId}`,
-    });
+    dispatch(changeIsModalActive(true));
+    dispatch(changeIsModalLoading(true));
 
     try {
-      const response = await fetch(`${constants.BASE_URL}${cardId}`);
+      const response = await fetch(`${BASE_URL}${cardId}`);
       const data = await response.json();
 
-      setIsModalLoading(false);
-      setCardDescription(data);
+      dispatch(changeIsModalLoading(false));
+      dispatch(changeCardDescription(data));
     } catch (error) {
       console.log(error);
-      setIsModalLoading(false);
-      setCardDescription(null);
+      dispatch(changeIsModalLoading(false));
+      dispatch(changeCardDescription(null));
     }
   };
-
   useEffect(() => {
-    if (initSearchCard) {
-      setModalActive(true);
-      getCardModalDescription(initSearchCard);
-    } else {
-      setModalActive(false);
-    }
+    const initialGetCardDescription = () => {
+      if (initSearchCard) {
+        getCardModalDescription(initSearchCard);
+      } else {
+        dispatch(changeIsModalActive(false));
+      }
+    };
+    initialGetCardDescription();
   }, [initSearchCard]);
 
   return (
     <div className="cards-wrapper">
-      {isLoading && <Spinner />}
-      {!isLoading &&
+      {isCardsLoading && <Spinner />}
+      {!isCardsLoading &&
         (cards.length ? (
           cards.map((card) => (
             <Card

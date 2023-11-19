@@ -7,38 +7,36 @@ import {
   changeIsNewSearchCalled,
   changeSearchString,
   changePrevSearchString,
-} from '../../store/cardsSlice';
+} from '../../store/mainPageSlice';
 
 export default function Search({ disabled }: ISearch) {
   const [, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
 
-  const searchString = useAppSelector((state) => state.cards.searchString);
+  const searchString = useAppSelector((state) => state.mainPage.searchString);
+
+  const actionOnNewSearch = () => {
+    dispatch(changePrevSearchString(searchString));
+    dispatch(changeIsNewSearchCalled(Math.random()));
+    setSearchParams({
+      name: searchString,
+      page: '1',
+    });
+  };
+
   const prevSearchString = useAppSelector(
-    (state) => state.cards.prevSearchString
+    (state) => state.mainPage.prevSearchString
   );
 
   function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.code === 'Enter' && prevSearchString !== searchString) {
-      dispatch(changePrevSearchString(searchString));
-      dispatch(changeIsNewSearchCalled(Math.random()));
-      setSearchParams({
-        name: searchString,
-        page: '1',
-      });
+      actionOnNewSearch();
     }
   }
 
-  function handlerClick() {
-    if (prevSearchString !== searchString) {
-      dispatch(changePrevSearchString(searchString));
-      dispatch(changeIsNewSearchCalled(Math.random()));
-      setSearchParams({
-        name: searchString,
-        page: '1',
-      });
-    }
-  }
+  const handlerClick = () => {
+    if (prevSearchString !== searchString) actionOnNewSearch();
+  };
 
   function handlerChange(event: React.ChangeEvent<HTMLInputElement>) {
     dispatch(changeSearchString(event.target.value));

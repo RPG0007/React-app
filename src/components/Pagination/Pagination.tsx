@@ -1,19 +1,20 @@
 import './Pagination.css';
-import { IPagination } from '../../types/interfaces';
-import { Context } from '../../context/context';
-import { useContext, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { changeCurrentPage } from '../../store/mainPageSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { changenumPerpage } from '../../store/mainPageSlice';
+import { useState } from 'react';
 
-export default function Pagination({
-  currentPage,
-  allPage,
-  setPerpage,
-}: IPagination) {
-  const { setCurrentPage, searchString } = useContext(Context);
+export default function Pagination() {
   const [, setSearchParams] = useSearchParams();
-  const [perpagenumber, setperpagenumber] = useState(20);
+  const dispatch = useAppDispatch();
+  const perpagenumber = useAppSelector((state) => state.mainPage.numPerpage);
+  const [prevPerpagenumber, setppn] = useState(20);
+  const searchString = useAppSelector((state) => state.mainPage.searchString);
+  const allPage = useAppSelector((state) => state.mainPage.allPage);
+  const currentPage = useAppSelector((state) => state.mainPage.currentPage);
   const handleClickPrevPage = () => {
-    setCurrentPage(currentPage - 1);
+    dispatch(changeCurrentPage(currentPage - 1));
     setSearchParams({
       name: searchString,
       page: `${currentPage - 1}`,
@@ -21,7 +22,7 @@ export default function Pagination({
   };
 
   const handleClickNextPage = () => {
-    setCurrentPage(currentPage + 1);
+    dispatch(changeCurrentPage(currentPage + 1));
     setSearchParams({
       name: searchString,
       page: `${currentPage + 1}`,
@@ -29,11 +30,14 @@ export default function Pagination({
   };
 
   function handlePerPageChanges(event: React.ChangeEvent<HTMLInputElement>) {
-    setperpagenumber(parseInt(event.target.value));
+    setppn(parseInt(event.target.value));
   }
-  function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
-    return event.code === 'Enter' && setPerpage(perpagenumber);
-  }
+  const handlerKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === 'Enter') {
+      dispatch(changenumPerpage(prevPerpagenumber));
+      console.log(perpagenumber);
+    }
+  };
 
   return (
     <div className="pagination-section">
