@@ -1,42 +1,17 @@
 import { describe, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Context } from '../../context/context';
-import {
-  mockCards,
-  mockCardDescription,
-  mockSearchString,
-} from '../../mocks/mockData';
-
 import { BrowserRouter } from 'react-router-dom';
 import Pagination from './Pagination';
-
-const mockFn = vi.fn();
+import { Provider } from 'react-redux/es/exports';
+import { store } from '../../store/store';
 
 const renderPagination = (currentPage: number) => {
   return (
     <BrowserRouter>
-      <Context.Provider
-        value={{
-          cards: mockCards,
-          searchString: mockSearchString,
-          cardDescription: mockCardDescription,
-          setIsLoading: mockFn,
-          setCards: mockFn,
-          setCurrentPage: mockFn,
-          setAllPage: mockFn,
-          setLinkNextPage: mockFn,
-          setLinkPrevPage: mockFn,
-          setIsModalLoading: mockFn,
-          setCardDescription: mockFn,
-          setModalActive: mockFn,
-          setSearchString: mockFn,
-          setClickedButtonFuturePage: mockFn,
-          setIsNewSearchCalled: mockFn,
-        }}
-      >
+      <Provider store={store}>
         <Pagination currentPage={currentPage} />
-      </Context.Provider>
+      </Provider>
     </BrowserRouter>
   );
 };

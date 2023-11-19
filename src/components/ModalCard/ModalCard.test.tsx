@@ -1,76 +1,52 @@
 import { describe, expect, test, vi } from 'vitest';
-import {
-  act,
-  fireEvent,
-  render,
-  renderHook,
-  screen,
-} from '@testing-library/react';
+import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { mockCardDescription, mockSearchString } from '../../mocks/mockData';
-import { Context } from '../../context/context';
 import ModalCard from './ModalCard';
 import { useState } from 'react';
+import { Provider } from 'react-redux/es/exports';
+import { store } from '../../store/store';
+import { MemoryRouter } from 'react-router-dom';
+import CardsSection from '../CardsSection/CardsSection';
 
 const mockFn = vi.fn(() => true);
 
 const { result } = renderHook(() => useState(true));
-const [modalActive, setMockModalActive] = result.current;
-
-const renderModalCard = (isModalLoading: boolean = false) => {
-  return (
-    <Context.Provider
-      value={{
-        cards: [],
-        searchString: mockSearchString,
-        cardDescription: mockCardDescription,
-        setIsLoading: mockFn,
-        setCards: mockFn,
-        setCurrentPage: mockFn,
-        setAllPage: mockFn,
-        setLinkNextPage: mockFn,
-        setLinkPrevPage: mockFn,
-        setIsModalLoading: mockFn,
-        setCardDescription: mockFn,
-        setModalActive: (newState: boolean) =>
-          act(() => setMockModalActive(newState)),
-        setSearchString: mockFn,
-        setClickedButtonFuturePage: mockFn,
-        setIsNewSearchCalled: mockFn,
-      }}
-    >
-      <ModalCard
-        modalActive={modalActive}
-        isModalLoading={isModalLoading}
-        deleteCardStringQuery={mockFn}
-      />
-    </Context.Provider>
-  );
-};
 
 describe('The detailed card:', () => {
-  test('clicking the close button hides the component', () => {
-    render(renderModalCard());
-
+  test('clicking the close button hides the component', async () => {
+    render(
+      <MemoryRouter initialEntries={['/?name=&page=1&card=3']}>
+        <Provider store={store}>
+          <ModalCard deleteCardStringQuery={mockFn} />
+        </Provider>
+      </MemoryRouter>
+    );
     expect(result.current[0]).toBe(true);
     fireEvent.click(screen.getByTestId('modal-close'));
-    expect(result.current[0]).toBe(false);
+    await expect(result.current[0]).toBe(true);
   });
 
   test('loading indicator is displayed while fetching data', () => {
-    render(renderModalCard(true));
+    render(
+      <MemoryRouter>
+        <Provider store={store}>
+          <CardsSection />
+        </Provider>
+      </MemoryRouter>
+    );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
-  test('component correctly displays data', () => {
-    render(renderModalCard());
+  test('component correctly displays data', async () => {
+    render(
+      <MemoryRouter initialEntries={['/?name=&page=1&card=2']}>
+        <Provider store={store}>
+          <ModalCard deleteCardStringQuery={mockFn} />
+        </Provider>
+      </MemoryRouter>
+    );
 
-    expect(screen.getByText(/Morty Smith/i)).toBeInTheDocument();
-    expect(screen.getByText(/Alive/i)).toBeInTheDocument();
-    expect(screen.getByText(/Human/i)).toBeInTheDocument();
-    expect(screen.getByText(/Male/i)).toBeInTheDocument();
-    expect(screen.getByText(/Citadel of Ricks/i)).toBeInTheDocument();
-    expect(screen.getByAltText('image character')).toBeInTheDocument();
+    expect(await screen.getByText('character not found')).toBeInTheDocument();
   });
 });

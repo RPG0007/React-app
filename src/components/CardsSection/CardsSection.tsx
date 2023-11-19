@@ -10,6 +10,7 @@ import {
   changeIsModalLoading,
 } from '../../store/mainPageSlice';
 import { useLazyGetCardDesctiptionQuery } from '../../store/api';
+
 export default function CardsSection() {
   const [searchParams] = useSearchParams();
 

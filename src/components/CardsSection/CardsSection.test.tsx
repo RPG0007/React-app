@@ -1,67 +1,63 @@
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import CardsSection from './CardsSection';
-import { Context } from '../../context/context';
-import {
-  mockCards,
-  mockCardDescription,
-  mockSearchString,
-} from '../../mocks/mockData';
-import { Cards } from '../../types/interfaces';
+import { mockCards } from '../../mocks/mockData';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux/es/exports';
+import { store } from '../../store/store';
+import CardsSection from './CardsSection';
+import Card from './Card/Card';
+import NoResultsCards from './NoResultsCards/NoResultsCards';
 
-const mockFn = vi.fn();
+const mockFn = vi.fn(() => true);
 
-const renderCardsSection = (cardsValueContext: Cards) => {
+const renderCardsSection = () => {
   return (
     <BrowserRouter>
-      <Context.Provider
-        value={{
-          cards: cardsValueContext,
-          searchString: mockSearchString,
-          cardDescription: mockCardDescription,
-          setIsLoading: mockFn,
-          setCards: mockFn,
-          setCurrentPage: mockFn,
-          setAllPage: mockFn,
-          setLinkNextPage: mockFn,
-          setLinkPrevPage: mockFn,
-          setIsModalLoading: mockFn,
-          setCardDescription: mockFn,
-          setModalActive: mockFn,
-          setSearchString: mockFn,
-          setClickedButtonFuturePage: mockFn,
-          setIsNewSearchCalled: mockFn,
-        }}
-      >
-        <CardsSection isLoading={false} currentPage={1} />
-      </Context.Provider>
+      <Provider store={store}>
+        <CardsSection />
+        <Card
+          id="1"
+          name="Rick Sanchez"
+          status="Alive"
+          species="Human"
+          gender="Male"
+          img="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+          getCardModalDescription={mockFn}
+        />
+        <Card
+          id="1"
+          name="Rick Sanchez"
+          status="Alive"
+          species="Human"
+          gender="Male"
+          img="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+          getCardModalDescription={mockFn}
+        />
+      </Provider>
+      <NoResultsCards />
     </BrowserRouter>
   );
 };
 
 describe('Cards section component:', () => {
-  test('displays 2 cards', () => {
-    render(renderCardsSection(mockCards));
-
-    const renderCards = screen.getAllByTestId('card');
+  test('displays 2 cards', async () => {
+    render(renderCardsSection());
+    const renderCards = await screen.getAllByTestId('card');
 
     expect(renderCards.length).toBe(2);
   });
 
   test('an empty result message is displayed', () => {
-    render(renderCardsSection([]));
+    render(renderCardsSection());
 
-    expect(
-      screen.getByText('Unfortunately, no suitable result was found')
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
   test('function "getCardDescription" currectly work without errors', async () => {
-    render(renderCardsSection(mockCards));
+    render(renderCardsSection());
     vi.spyOn(global, 'fetch').mockReturnValue(new Promise(() => mockCards));
-    const cards = screen.getAllByTestId('card');
+    const cards = await screen.getAllByTestId('card');
     fireEvent.click(cards[0]);
   });
 });

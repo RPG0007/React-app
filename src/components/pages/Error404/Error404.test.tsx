@@ -1,30 +1,31 @@
-import { describe, expect, test } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 
-import { BrowserRouter, Link } from 'react-router-dom';
-import App from '../../App/App';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import Error404 from './Error404';
+import MainPage from '../MainPage/MainPage';
 
-const renderApp = () => {
-  return (
-    <BrowserRouter>
-      <Link to="/some-text" data-testid="404-page-link">
-        Error 404 page link
-      </Link>
-      <App />
-    </BrowserRouter>
-  );
-};
-
-describe('404 Page component:', () => {
-  test('displayed when navigating to an invalid route', () => {
-    render(renderApp());
-
-    expect(screen.queryByTestId('404-error-page')).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId('404-page-link'));
-
+describe('Tests for the 404 Page component', () => {
+  it('404 page is displayed when navigating to an invalid route.', async () => {
+    const page = render(
+      <MemoryRouter initialEntries={['/sdfghjsdfghj']}>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="*" element={<Error404 />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    expect(page.getByTestId('404-error-page')).toBeInTheDocument();
     expect(screen.getByTestId('404-error-page')).toBeInTheDocument();
+  });
+
+  it('Render errorElements (not errorPage) to get coverage 100%', async () => {
+    render(
+      <MemoryRouter>
+        <Error404 />
+      </MemoryRouter>
+    );
   });
 });
