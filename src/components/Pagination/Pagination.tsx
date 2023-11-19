@@ -8,7 +8,7 @@ import { IPagination } from '../../types/interfaces';
 export default function Pagination({ currentPage }: IPagination) {
   const [, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const [prevPerpagenumber, setppn] = useState(20);
+  const [prevPerpagenumber, setPerPageNumber] = useState(20);
   const searchString = useAppSelector((state) => state.mainPage.searchString);
   const allPage = useAppSelector((state) => state.mainPage.allPage);
 
@@ -27,7 +27,7 @@ export default function Pagination({ currentPage }: IPagination) {
   };
 
   function handlePerPageChanges(event: React.ChangeEvent<HTMLInputElement>) {
-    setppn(parseInt(event.target.value));
+    setPerPageNumber(parseInt(event.target.value));
   }
   const handlerKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter') {
