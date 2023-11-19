@@ -32,6 +32,10 @@ export interface ISearch {
   disabled: boolean;
 }
 
+export interface IPagination {
+  currentPage: number;
+}
+
 export interface IErrorBoundary {
   children?: React.ReactNode;
 }

@@ -1,20 +1,18 @@
 import './Pagination.css';
 import { useSearchParams } from 'react-router-dom';
-import { changeCurrentPage } from '../../store/mainPageSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { changenumPerpage } from '../../store/mainPageSlice';
 import { useState } from 'react';
+import { IPagination } from '../../types/interfaces';
 
-export default function Pagination() {
+export default function Pagination({ currentPage }: IPagination) {
   const [, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const perpagenumber = useAppSelector((state) => state.mainPage.numPerpage);
   const [prevPerpagenumber, setppn] = useState(20);
   const searchString = useAppSelector((state) => state.mainPage.searchString);
   const allPage = useAppSelector((state) => state.mainPage.allPage);
-  const currentPage = useAppSelector((state) => state.mainPage.currentPage);
+
   const handleClickPrevPage = () => {
-    dispatch(changeCurrentPage(currentPage - 1));
     setSearchParams({
       name: searchString,
       page: `${currentPage - 1}`,
@@ -22,7 +20,6 @@ export default function Pagination() {
   };
 
   const handleClickNextPage = () => {
-    dispatch(changeCurrentPage(currentPage + 1));
     setSearchParams({
       name: searchString,
       page: `${currentPage + 1}`,
@@ -35,7 +32,6 @@ export default function Pagination() {
   const handlerKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter') {
       dispatch(changenumPerpage(prevPerpagenumber));
-      console.log(perpagenumber);
     }
   };
 

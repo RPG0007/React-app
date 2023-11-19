@@ -13,7 +13,7 @@ import Pagination from './Pagination';
 
 const mockFn = vi.fn();
 
-const renderPagination = () => {
+const renderPagination = (currentPage: number) => {
   return (
     <BrowserRouter>
       <Context.Provider
@@ -35,7 +35,7 @@ const renderPagination = () => {
           setIsNewSearchCalled: mockFn,
         }}
       >
-        <Pagination />
+        <Pagination currentPage={currentPage} />
       </Context.Provider>
     </BrowserRouter>
   );
@@ -43,7 +43,7 @@ const renderPagination = () => {
 
 describe('Pagination component:', () => {
   test('button prev page currectly work without errors', () => {
-    render(renderPagination());
+    render(renderPagination(4));
     vi.spyOn(global, 'fetch').mockReturnValue(new Promise(() => ''));
     fireEvent.click(screen.getByTestId('button-prev-page'));
   });

@@ -3,11 +3,7 @@ import searchIcon from '../../assets/search.png';
 import { ISearch } from '../../types/interfaces';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import {
-  changeIsNewSearchCalled,
-  changeSearchString,
-  changePrevSearchString,
-} from '../../store/mainPageSlice';
+import { changeSearchString } from '../../store/mainPageSlice';
 
 export default function Search({ disabled }: ISearch) {
   const [, setSearchParams] = useSearchParams();
@@ -16,26 +12,19 @@ export default function Search({ disabled }: ISearch) {
   const searchString = useAppSelector((state) => state.mainPage.searchString);
 
   const actionOnNewSearch = () => {
-    dispatch(changePrevSearchString(searchString));
-    dispatch(changeIsNewSearchCalled(Math.random()));
+    dispatch(changeSearchString(searchString.trim()));
     setSearchParams({
-      name: searchString,
+      name: searchString.trim(),
       page: '1',
     });
   };
 
-  const prevSearchString = useAppSelector(
-    (state) => state.mainPage.prevSearchString
-  );
-
   function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.code === 'Enter' && prevSearchString !== searchString) {
-      actionOnNewSearch();
-    }
+    if (event.code === 'Enter') actionOnNewSearch();
   }
 
   const handlerClick = () => {
-    if (prevSearchString !== searchString) actionOnNewSearch();
+    actionOnNewSearch();
   };
 
   function handlerChange(event: React.ChangeEvent<HTMLInputElement>) {

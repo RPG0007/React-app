@@ -6,15 +6,14 @@ import Pagination from '../../Pagination/Pagination';
 import Seacrh from '../../Search/Search';
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
-import { BASE_URL } from '../../../constants/constants';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  changeCurrentPage,
   changeCurrentCards,
   changeIsCardsLoading,
   changeSearchString,
   changeAllPage,
 } from '../../../store/mainPageSlice';
+import { useGetResultNewSearchQuery } from '../../../store/api';
 
 export default function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,61 +33,42 @@ export default function MainPage() {
     (state) => state.mainPage.isCardsLoading
   );
   const searchString = useAppSelector((state) => state.mainPage.searchString);
-  const isNewSearchCalled = useAppSelector(
-    (state) => state.mainPage.isNewSearchCalled
-  );
-  const currentPage = useAppSelector((state) => state.mainPage.currentPage);
 
   const deleteCardStringQuery = useCallback(() => {
-    setSearchParams({ name: searchString, page: `${currentPage}` });
-  }, [currentPage, searchString]);
+    setSearchParams({ name: searchString, page: `${initSearchPage}` });
+  }, [initSearchPage, searchString]);
+
+  const queryString = `${
+    initSearchString
+      ? `?name=${initSearchString}&page=${initSearchPage}`
+      : `?page=${initSearchPage}`
+  }`;
+
+  const { currentData, isFetching } = useGetResultNewSearchQuery(queryString);
 
   useEffect(() => {
-    const initialSearch = async () => {
-      const searchStringTrimed = initSearchString.trim();
+    dispatch(changeIsCardsLoading(isFetching));
+  }, [isFetching]);
 
-      dispatch(changeIsCardsLoading(true));
-      dispatch(changeSearchString(searchStringTrimed));
-      dispatch(changeCurrentPage(initSearchPage));
+  useEffect(() => {
+    dispatch(changeSearchString(initSearchString));
 
-      const queryString = `${
-        searchString
-          ? `?name=${searchStringTrimed}&page=${initSearchPage}`
-          : `?page=${initSearchPage}`
-      }`;
-
-      const nextLinkPage: string = `${BASE_URL}${queryString}`;
-
-      try {
-        const response = await fetch(nextLinkPage);
-        const data = await response.json();
-
-        dispatch(changeCurrentCards(data.results.slice(0, numPerpage)));
-        dispatch(changeIsCardsLoading(false));
-        dispatch(changeSearchString(searchStringTrimed));
-        dispatch(changeAllPage(data.info.pages));
-      } catch (error) {
-        console.log(error);
-        dispatch(changeCurrentCards([]));
-        dispatch(changeIsCardsLoading(false));
-      }
-    };
-
-    initialSearch();
-  }, [
-    currentPage,
-    isNewSearchCalled,
-    initSearchString,
-    initSearchPage,
-    numPerpage,
-  ]);
+    if (currentData) {
+      dispatch(changeCurrentCards(currentData.results.slice(0, numPerpage)));
+      dispatch(changeAllPage(currentData.info.pages));
+    } else {
+      dispatch(changeCurrentCards([]));
+    }
+  }, [initSearchString, initSearchPage, currentData, numPerpage]);
 
   return (
     <>
       <Seacrh disabled={isCardsLoading}></Seacrh>
       <ErrorButton />
       <CardsSection />
-      {!isCardsLoading && Boolean(cards.length) && <Pagination />}
+      {!isCardsLoading && Boolean(cards.length) && (
+        <Pagination currentPage={initSearchPage} />
+      )}
       <ModalCard deleteCardStringQuery={deleteCardStringQuery} />
     </>
   );
