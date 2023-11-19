@@ -1,6 +1,6 @@
 import './ModalCard.css';
 import ModalCardContent from './ModalCardContent/ModalCardContent';
-import { IModalCardProps } from '../../types/interfaces';
+import { IModalCard } from '../../types/interfaces';
 import { useContext } from 'react';
 import { Context } from '../../context/context';
 
@@ -8,8 +8,9 @@ export default function ModalCard({
   modalActive,
   isModalLoading,
   deleteCardStringQuery,
-}: IModalCardProps) {
+}: IModalCard) {
   const { setModalActive } = useContext(Context);
+
   function handlerClickModal() {
     setModalActive(false);
     deleteCardStringQuery();
@@ -21,11 +22,11 @@ export default function ModalCard({
 
   return (
     <div
-      className={modalActive ? 'modal modal-active' : 'modal'}
+      className={`modal ${modalActive && 'modal-active'}`}
       onClick={handlerClickModal}
     >
       <div
-        className={modalActive ? 'modal-card modal-card-active' : 'modal-card'}
+        className={`modal-card ${modalActive && 'modal-card-active'}`}
         onClick={handlerClickModalCard}
       >
         <div

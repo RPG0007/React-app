@@ -1,5 +1,5 @@
 import styles from './Card.module.css';
-import { ICardProps } from '../../../types/interfaces';
+import { ICard } from '../../../types/interfaces';
 import { useContext } from 'react';
 import { Context } from '../../../context/context';
 
@@ -11,7 +11,7 @@ export default function Card({
   status,
   id,
   getCardModalDescription,
-}: ICardProps) {
+}: ICard) {
   const { setModalActive } = useContext(Context);
   function handlerClick() {
     setModalActive(true);

@@ -3,13 +3,13 @@ import { useContext, useEffect } from 'react';
 import Spinner from '../Spinner/Spinner';
 import Card from './Card/Card';
 import NoResultsCards from './NoResultsCards/NoResultsCards';
-import { ICardsSectionProps } from '../../types/interfaces';
+import { ICardsSection } from '../../types/interfaces';
 import { useSearchParams } from 'react-router-dom';
 import * as constants from '../../constants/constants';
 export default function CardsSection({
   isLoading,
   currentPage,
-}: ICardsSectionProps) {
+}: ICardsSection) {
   const {
     cards,
     searchString,

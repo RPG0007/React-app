@@ -2,11 +2,11 @@ import './ModalCardContent.css';
 import Spinner from '../../Spinner/Spinner';
 import { Context } from '../../../context/context';
 import { useContext } from 'react';
-import { IModalCardContetntProps } from '../../../types/interfaces';
+import { IModalCardContetnt } from '../../../types/interfaces';
 
 export default function ModalCardContent({
   isModalLoading,
-}: IModalCardContetntProps) {
+}: IModalCardContetnt) {
   const { cardDescription } = useContext(Context);
 
   return (

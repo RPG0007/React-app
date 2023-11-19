@@ -8,12 +8,12 @@ import {
   mockCardDescription,
   mockSearchString,
 } from '../../mocks/mockData';
-import { ICards } from '../../types/interfaces';
+import { Cards } from '../../types/interfaces';
 import { BrowserRouter } from 'react-router-dom';
 
 const mockFn = vi.fn();
 
-const renderCardsSection = (cardsValueContext: ICards) => {
+const renderCardsSection = (cardsValueContext: Cards) => {
   return (
     <BrowserRouter>
       <Context.Provider
@@ -31,6 +31,8 @@ const renderCardsSection = (cardsValueContext: ICards) => {
           setCardDescription: mockFn,
           setModalActive: mockFn,
           setSearchString: mockFn,
+          setClickedButtonFuturePage: mockFn,
+          setIsNewSearchCalled: mockFn,
         }}
       >
         <CardsSection isLoading={false} currentPage={1} />

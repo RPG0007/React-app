@@ -51,6 +51,8 @@ const renderCardAndModalCard = () => {
         setModalActive: (newState: boolean) =>
           act(() => setMockModalActive(newState)),
         setSearchString: mockFn,
+        setClickedButtonFuturePage: mockFn,
+        setIsNewSearchCalled: mockFn,
       }}
     >
       <Card

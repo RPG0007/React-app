@@ -35,6 +35,8 @@ const renderModalCard = (isModalLoading: boolean = false) => {
         setModalActive: (newState: boolean) =>
           act(() => setMockModalActive(newState)),
         setSearchString: mockFn,
+        setClickedButtonFuturePage: mockFn,
+        setIsNewSearchCalled: mockFn,
       }}
     >
       <ModalCard

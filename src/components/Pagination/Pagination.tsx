@@ -1,83 +1,32 @@
 import './Pagination.css';
-import { IPaginationProps } from '../../types/interfaces';
+import { IPagination } from '../../types/interfaces';
 import { Context } from '../../context/context';
 import { useContext } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import * as constants from '../../constants/constants';
 
 export default function Pagination({
   currentPage,
   allPage,
-  linkNextPage,
-  linkPrevPage,
-  handlePerPageChange,
-  numPerPage,
-}: IPaginationProps) {
-  const newSearch = async (searchString: string) => {
-    setSearchParams({ name: searchString, page: `1` });
-    try {
-      const response = await fetch(
-        `${constants.BASE_URL}${
-          searchString ? `?name=${searchString}&page=1` : `?page=1`
-        }`
-      );
-      const data = await response.json();
-
-      setCards(data.results.slice(0, numPerPage));
-      setIsLoading(false);
-      setLinkPrevPage(data.info.prev);
-      setLinkNextPage(data.info.next);
-      setCurrentPage(1);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  function handlePerPageChanges(event: React.ChangeEvent<HTMLInputElement>) {
-    handlePerPageChange(parseInt(event.target.value));
-  }
-  function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
-    return event.code === 'Enter' && newSearch(searchString);
-  }
-  const {
-    searchString,
-    setIsLoading,
-    setCards,
-    setCurrentPage,
-    setLinkNextPage,
-    setLinkPrevPage,
-  } = useContext(Context);
-  // eslint-disable-next-line
-  const [searchParams, setSearchParams] = useSearchParams();
-  const movePage = async (stringFuturePage: 'next' | 'prev') => {
-    setIsLoading(true);
-
-    const pageFutureNumbers =
-      stringFuturePage === 'next' ? currentPage + 1 : currentPage - 1;
-    const pageFutureLink =
-      stringFuturePage === 'next' ? linkNextPage : linkPrevPage;
-
-    setSearchParams({ name: searchString, page: `${pageFutureNumbers}` });
-    try {
-      const response = await fetch(`${pageFutureLink}`);
-      const data = await response.json();
-
-      setCards(data.results.slice(0, numPerPage));
-      setIsLoading(false);
-      setLinkPrevPage(data.info.prev);
-      setLinkNextPage(data.info.next);
-      setCurrentPage(pageFutureNumbers);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  doChangeForUseEffect,
+  setPerpage,
+}: IPagination) {
+  const { setClickedButtonFuturePage } = useContext(Context);
 
   const handleClickPrevPage = () => {
-    movePage('prev');
+    setClickedButtonFuturePage('prev');
+    doChangeForUseEffect();
   };
 
   const handleClickNextPage = () => {
-    movePage('next');
+    setClickedButtonFuturePage('next');
+    doChangeForUseEffect();
   };
+
+  function handlePerPageChanges(event: React.ChangeEvent<HTMLInputElement>) {
+    setPerpage(parseInt(event.target.value));
+  }
+  function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
+    return event.code === 'Enter' && doChangeForUseEffect();
+  }
 
   return (
     <div className="pagination-section">

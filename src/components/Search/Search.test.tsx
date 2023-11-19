@@ -38,9 +38,11 @@ const renderSearch = () => {
           setCardDescription: mockFn,
           setModalActive: mockFn,
           setSearchString: mockFn,
+          setClickedButtonFuturePage: mockFn,
+          setIsNewSearchCalled: mockFn,
         }}
       >
-        <Search disabled={false} />
+        <Search disabled={false} doChangeForUseEffect={mockFn} />
       </Context.Provider>
     </BrowserRouter>
   );

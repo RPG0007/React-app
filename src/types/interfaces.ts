@@ -1,8 +1,9 @@
 import { ErrorInfo } from 'react';
 
-export type ICards = Record<string, string>[];
+export type Cards = Record<string, string>[];
+export type ClickedButtonFuturePage = 'prev' | 'next' | '';
 
-export interface ICardProps {
+export interface ICard {
   img: string;
   name: string;
   species: string;
@@ -12,16 +13,16 @@ export interface ICardProps {
   getCardModalDescription(id: string): void;
 }
 
-export interface ICardsSectionProps {
+export interface ICardsSection {
   isLoading: boolean;
   currentPage: number;
 }
 
-export interface IModalCardContetntProps {
+export interface IModalCardContetnt {
   isModalLoading: boolean;
 }
 
-export interface IModalCardProps {
+export interface IModalCard {
   modalActive: boolean;
   isModalLoading: boolean;
   deleteCardStringQuery(): void;
@@ -39,20 +40,21 @@ export interface ICardDescription {
   image: string;
 }
 
-export interface IPaginationProps {
+export interface IPagination {
   currentPage: number;
   allPage: number | null;
   linkPrevPage: string;
   linkNextPage: string;
-  handlePerPageChange(page: number): void;
-  numPerPage: number;
+  doChangeForUseEffect(): void;
+  setPerpage(num: number): void;
 }
 
-export interface ISearchProps {
+export interface ISearch {
   disabled: boolean;
+  doChangeForUseEffect(): void;
 }
 
-export interface IErrorBoundaryProps {
+export interface IErrorBoundary {
   children?: React.ReactNode;
 }
 
@@ -64,10 +66,10 @@ export interface IErrorBoundaryState {
 
 export interface IContextDefaultValue {
   searchString: string;
-  cards: ICards;
+  cards: Cards;
   cardDescription: ICardDescription | null;
   setIsLoading(newState: boolean): void;
-  setCards(newState: ICards): void;
+  setCards(newState: Cards): void;
   setCurrentPage(newState: number): void;
   setAllPage(newState: number): void;
   setLinkNextPage(newState: string): void;
@@ -76,4 +78,6 @@ export interface IContextDefaultValue {
   setCardDescription(newState: ICardDescription | null): void;
   setModalActive(newState: boolean): void;
   setSearchString(newState: string): void;
+  setClickedButtonFuturePage(newState: ClickedButtonFuturePage): void;
+  setIsNewSearchCalled(newState: boolean): void;
 }
