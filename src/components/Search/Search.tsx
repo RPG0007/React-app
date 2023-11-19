@@ -1,21 +1,27 @@
 import styles from './Search.module.css';
 import searchIcon from '../../assets/search.png';
-import { Context } from '../../context/context';
-import { useContext, useState } from 'react';
 import { ISearch } from '../../types/interfaces';
 import { useSearchParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  changeIsNewSearchCalled,
+  changeSearchString,
+  changePrevSearchString,
+} from '../../store/cardsSlice';
 
 export default function Search({ disabled }: ISearch) {
-  const { searchString, setSearchString, setIsNewSearchCalled } =
-    useContext(Context);
   const [, setSearchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
 
-  const [prevSearchString, setPrevSearchString] = useState(searchString);
+  const searchString = useAppSelector((state) => state.cards.searchString);
+  const prevSearchString = useAppSelector(
+    (state) => state.cards.prevSearchString
+  );
 
   function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.code === 'Enter' && prevSearchString !== searchString) {
-      setPrevSearchString(searchString);
-      setIsNewSearchCalled(Math.random());
+      dispatch(changePrevSearchString(searchString));
+      dispatch(changeIsNewSearchCalled(Math.random()));
       setSearchParams({
         name: searchString,
         page: '1',
@@ -25,8 +31,8 @@ export default function Search({ disabled }: ISearch) {
 
   function handlerClick() {
     if (prevSearchString !== searchString) {
-      setPrevSearchString(searchString);
-      setIsNewSearchCalled(Math.random());
+      dispatch(changePrevSearchString(searchString));
+      dispatch(changeIsNewSearchCalled(Math.random()));
       setSearchParams({
         name: searchString,
         page: '1',
@@ -35,7 +41,7 @@ export default function Search({ disabled }: ISearch) {
   }
 
   function handlerChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchString(event.target.value);
+    dispatch(changeSearchString(event.target.value));
   }
 
   return (

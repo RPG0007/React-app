@@ -21,8 +21,6 @@ const renderPagination = (currentPage: number) => {
           cards: mockCards,
           searchString: mockSearchString,
           cardDescription: mockCardDescription,
-          setIsLoading: mockFn,
-          setCards: mockFn,
           setCurrentPage: mockFn,
           setAllPage: mockFn,
           setLinkNextPage: mockFn,
@@ -30,9 +28,8 @@ const renderPagination = (currentPage: number) => {
           setIsModalLoading: mockFn,
           setCardDescription: mockFn,
           setModalActive: mockFn,
-          setSearchString: mockFn,
           setClickedButtonFuturePage: mockFn,
-          setIsNewSearchCalled: mockFn,
+          changeIsCardsLoading: mockFn,
         }}
       >
         <Pagination

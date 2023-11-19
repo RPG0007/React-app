@@ -9,25 +9,37 @@ import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import {
   ICardDescription,
-  Cards,
   ClickedButtonFuturePage,
 } from '../../../types/interfaces';
 import { BASE_URL } from '../../../constants/constants';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import {
+  changeCurrentPageCards,
+  changeIsCardsLoading,
+  changeSearchString,
+} from '../../../store/cardsSlice';
 
 export default function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const cards = useAppSelector((state) => state.cards.cards);
+  const isCardsLoading = useAppSelector((state) => state.cards.isCardsLoading);
+  const searchString = useAppSelector((state) => state.cards.searchString);
+  const isNewSearchCalled = useAppSelector(
+    (state) => state.cards.isNewSearchCalled
+  );
+
+  const dispatch = useAppDispatch();
+  //const changeCards = (cards: Cards) => dispatch(changeCurrentPageCards(cards));
+
   const searchValue: string | null = searchParams.get('name');
   const initSearchString: string = searchValue ? searchValue : '';
-  const [searchString, setSearchString] = useState(initSearchString);
 
   const searchPage: string | null = searchParams.get('page');
   const initSearchPage: string =
     searchPage && +searchPage > 0 ? searchPage : '1';
   const [currentPage, setCurrentPage] = useState(+initSearchPage);
   const [numPerPage, setPerPage] = useState(20);
-  const [cards, setCards] = useState<Cards>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   const [allPage, setAllPage] = useState(1);
   const [linkPrevPage, setLinkPrevPage] = useState('');
@@ -41,17 +53,21 @@ export default function MainPage() {
   const [clickedButtonFuturePage, setClickedButtonFuturePage] =
     useState<ClickedButtonFuturePage>('');
 
-  const [isNewSearchCalled, setIsNewSearchCalled] = useState(0);
-
   const deleteCardStringQuery = useCallback(() => {
     setSearchParams({ name: searchString, page: `${currentPage}` });
   }, [currentPage, searchString]);
 
   useEffect(() => {
     const initialSearch = async () => {
-      setIsLoading(true);
+      //
+      //setIsLoading(true);
+      dispatch(changeIsCardsLoading(true));
+      //setSearchString(initSearchString);
+      dispatch(changeSearchString(initSearchString));
+
+      //
+
       setCurrentPage(+initSearchPage);
-      setSearchString(initSearchString);
 
       const searchStringTrimed = initSearchString.trim();
 
@@ -68,16 +84,24 @@ export default function MainPage() {
         const response = await fetch(futureLinkPage);
         const data = await response.json();
 
-        setCards(data.results.slice(0, numPerPage));
-        setSearchString(searchStringTrimed);
+        // REDUX
+        //setCards(data.results);
+        dispatch(changeCurrentPageCards(data.results.slice(0, numPerPage)));
+        //setIsLoading(false);
+        dispatch(changeIsCardsLoading(false));
+        //setSearchString(searchStringTrimed);
+        dispatch(changeSearchString(searchStringTrimed));
+        //
+
         setAllPage(data.info.pages);
         setLinkPrevPage(data.info.prev);
         setLinkNextPage(data.info.next);
-        setIsLoading(false);
       } catch (error) {
         console.log(error);
-        setCards([]);
-        setIsLoading(false);
+        dispatch(changeCurrentPageCards([]));
+        //setCards([]);
+        dispatch(changeIsCardsLoading(false));
+        //setIsLoading(false);
       }
     };
 
@@ -96,8 +120,10 @@ export default function MainPage() {
         cards,
         searchString,
         cardDescription,
-        setIsLoading,
-        setCards,
+        //setIsLoading,
+        changeIsCardsLoading,
+        //setCards,
+
         setCurrentPage,
         setAllPage,
         setLinkNextPage,
@@ -105,15 +131,15 @@ export default function MainPage() {
         setIsModalLoading,
         setCardDescription,
         setModalActive,
-        setSearchString,
+        //setSearchString,
         setClickedButtonFuturePage,
-        setIsNewSearchCalled,
+        //setIsNewSearchCalled,
       }}
     >
-      <Seacrh disabled={isLoading}></Seacrh>
+      <Seacrh disabled={isCardsLoading}></Seacrh>
       <ErrorButton />
-      <CardsSection isLoading={isLoading} currentPage={currentPage} />
-      {!isLoading && Boolean(cards.length) && (
+      <CardsSection isLoading={isCardsLoading} currentPage={currentPage} />
+      {!isCardsLoading && Boolean(cards.length) && (
         <Pagination
           allPage={allPage}
           currentPage={currentPage}
