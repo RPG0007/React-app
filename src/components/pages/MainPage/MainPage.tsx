@@ -12,7 +12,7 @@ import {
   Cards,
   ClickedButtonFuturePage,
 } from '../../../types/interfaces';
-import * as constants from '../../../constants/constants';
+import { BASE_URL } from '../../../constants/constants';
 
 export default function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,70 +41,54 @@ export default function MainPage() {
   const [clickedButtonFuturePage, setClickedButtonFuturePage] =
     useState<ClickedButtonFuturePage>('');
 
-  const [isNewSearchCalled, setIsNewSearchCalled] = useState(false);
-
-  const [toggleChangeForUseEffect, setIsToggleChangeForUseEffect] =
-    useState(false);
+  const [isNewSearchCalled, setIsNewSearchCalled] = useState(0);
 
   const deleteCardStringQuery = useCallback(() => {
     setSearchParams({ name: searchString, page: `${currentPage}` });
-  }, [currentPage, searchString, setSearchParams]);
-
-  const doChangeForUseEffect = () => {
-    setIsToggleChangeForUseEffect(!toggleChangeForUseEffect);
-  };
+  }, [currentPage, searchString]);
 
   useEffect(() => {
     const initialSearch = async () => {
       setIsLoading(true);
-      const searchStringTrimed = searchString.trim();
+      setCurrentPage(+initSearchPage);
+      setSearchString(initSearchString);
 
-      const futureNumberPage = isNewSearchCalled
-        ? 1
-        : clickedButtonFuturePage === 'next'
-        ? currentPage + 1
-        : clickedButtonFuturePage === 'prev'
-        ? currentPage - 1
-        : currentPage;
+      const searchStringTrimed = initSearchString.trim();
 
-      const futureLinkPage =
-        clickedButtonFuturePage === 'next'
-          ? linkNextPage
-          : clickedButtonFuturePage === 'prev'
-          ? linkPrevPage
-          : `${constants.BASE_URL}${
-              searchString
-                ? `?name=${searchStringTrimed}&page=${currentPage}`
-                : `?page=${currentPage}`
-            }`;
+      let futureLinkPage: string = `${BASE_URL}${
+        searchString
+          ? `?name=${searchStringTrimed}&page=${currentPage}`
+          : `?page=${currentPage}`
+      }`;
 
-      setSearchParams({
-        name: searchStringTrimed,
-        page: `${futureNumberPage}`,
-      });
+      if (clickedButtonFuturePage === 'next') futureLinkPage = linkNextPage;
+      if (clickedButtonFuturePage === 'prev') futureLinkPage = linkPrevPage;
 
       try {
         const response = await fetch(futureLinkPage);
         const data = await response.json();
 
         setCards(data.results.slice(0, numPerPage));
-        setIsLoading(false);
-        setCurrentPage(+futureNumberPage);
+        setSearchString(searchStringTrimed);
         setAllPage(data.info.pages);
         setLinkPrevPage(data.info.prev);
         setLinkNextPage(data.info.next);
-        setSearchString(searchStringTrimed);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
         setCards([]);
         setIsLoading(false);
       }
-      setClickedButtonFuturePage('');
-      setIsNewSearchCalled(false);
     };
 
     initialSearch();
-  }, [toggleChangeForUseEffect]);
+  }, [
+    currentPage,
+    isNewSearchCalled,
+    initSearchString,
+    initSearchPage,
+    numPerPage,
+  ]);
 
   return (
     <Context.Provider
@@ -126,10 +110,7 @@ export default function MainPage() {
         setIsNewSearchCalled,
       }}
     >
-      <Seacrh
-        disabled={isLoading}
-        doChangeForUseEffect={doChangeForUseEffect}
-      ></Seacrh>
+      <Seacrh disabled={isLoading}></Seacrh>
       <ErrorButton />
       <CardsSection isLoading={isLoading} currentPage={currentPage} />
       {!isLoading && Boolean(cards.length) && (
@@ -138,7 +119,6 @@ export default function MainPage() {
           currentPage={currentPage}
           linkPrevPage={linkPrevPage}
           linkNextPage={linkNextPage}
-          doChangeForUseEffect={doChangeForUseEffect}
           setPerpage={setPerPage}
         />
       )}

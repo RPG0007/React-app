@@ -1,23 +1,37 @@
 import styles from './Search.module.css';
 import searchIcon from '../../assets/search.png';
 import { Context } from '../../context/context';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ISearch } from '../../types/interfaces';
+import { useSearchParams } from 'react-router-dom';
 
-export default function Search({ disabled, doChangeForUseEffect }: ISearch) {
+export default function Search({ disabled }: ISearch) {
   const { searchString, setSearchString, setIsNewSearchCalled } =
     useContext(Context);
+  const [, setSearchParams] = useSearchParams();
+
+  const [prevSearchString, setPrevSearchString] = useState(searchString);
 
   function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.code === 'Enter') {
-      setIsNewSearchCalled(true);
-      doChangeForUseEffect();
+    if (event.code === 'Enter' && prevSearchString !== searchString) {
+      setPrevSearchString(searchString);
+      setIsNewSearchCalled(Math.random());
+      setSearchParams({
+        name: searchString,
+        page: '1',
+      });
     }
   }
 
   function handlerClick() {
-    setIsNewSearchCalled(true);
-    doChangeForUseEffect();
+    if (prevSearchString !== searchString) {
+      setPrevSearchString(searchString);
+      setIsNewSearchCalled(Math.random());
+      setSearchParams({
+        name: searchString,
+        page: '1',
+      });
+    }
   }
 
   function handlerChange(event: React.ChangeEvent<HTMLInputElement>) {

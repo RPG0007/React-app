@@ -42,7 +42,7 @@ const renderSearch = () => {
           setIsNewSearchCalled: mockFn,
         }}
       >
-        <Search disabled={false} doChangeForUseEffect={mockFn} />
+        <Search disabled={false} />
       </Context.Provider>
     </BrowserRouter>
   );

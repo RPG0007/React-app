@@ -17,6 +17,7 @@ export default function CardsSection({
     setCardDescription,
     setModalActive,
   } = useContext(Context);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const SearchCard: string | null = searchParams.get('card');
   const initSearchCard: string = SearchCard ? SearchCard : '';
@@ -28,9 +29,11 @@ export default function CardsSection({
       page: `${currentPage}`,
       card: `${cardId}`,
     });
+
     try {
       const response = await fetch(`${constants.BASE_URL}${cardId}`);
       const data = await response.json();
+
       setIsModalLoading(false);
       setCardDescription(data);
     } catch (error) {
@@ -44,8 +47,10 @@ export default function CardsSection({
     if (initSearchCard) {
       setModalActive(true);
       getCardModalDescription(initSearchCard);
+    } else {
+      setModalActive(false);
     }
-  }, []);
+  }, [initSearchCard]);
 
   return (
     <div className="cards-wrapper">

@@ -45,13 +45,11 @@ export interface IPagination {
   allPage: number | null;
   linkPrevPage: string;
   linkNextPage: string;
-  doChangeForUseEffect(): void;
   setPerpage(num: number): void;
 }
 
 export interface ISearch {
   disabled: boolean;
-  doChangeForUseEffect(): void;
 }
 
 export interface IErrorBoundary {
@@ -79,5 +77,5 @@ export interface IContextDefaultValue {
   setModalActive(newState: boolean): void;
   setSearchString(newState: string): void;
   setClickedButtonFuturePage(newState: ClickedButtonFuturePage): void;
-  setIsNewSearchCalled(newState: boolean): void;
+  setIsNewSearchCalled(newState: number): void;
 }
