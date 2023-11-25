@@ -1,16 +1,15 @@
-import './ModalCard.css';
+import styles from './ModalCard.module.css';
 import ModalCardContent from './ModalCardContent/ModalCardContent';
-import { IModalCard } from '../../types/interfaces';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { changeIsModalActive } from '../../store/mainPageSlice';
 
-export default function ModalCard({ deleteCardStringQuery }: IModalCard) {
+export default function ModalCard() {
   const isModalActive = useAppSelector((state) => state.mainPage.isModalActive);
 
   const dispatch = useAppDispatch();
 
   function handlerClickModal() {
-    deleteCardStringQuery();
+     
     dispatch(changeIsModalActive(false));
   }
 
@@ -20,15 +19,15 @@ export default function ModalCard({ deleteCardStringQuery }: IModalCard) {
 
   return (
     <div
-      className={`modal ${isModalActive && 'modal-active'}`}
+      className={`${styles.modal} ${isModalActive && styles.modalActive}`}
       onClick={handlerClickModal}
     >
       <div
-        className={`modal-card ${isModalActive && 'modal-card-active'}`}
+        className={`${styles.modalCard} ${isModalActive && styles.modalCardActive}`}
         onClick={handlerClickModalCard}
       >
         <div
-          className="modal-close-button"
+          className={styles.modalCloseButton}
           onClick={handlerClickModal}
           data-testid="modal-close"
         >

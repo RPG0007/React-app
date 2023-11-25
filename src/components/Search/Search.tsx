@@ -5,18 +5,17 @@ import { ISearch } from '../../types/interfaces';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { changeSearchString } from '../../store/mainPageSlice';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export default function Search({ disabled }: ISearch) {
   // const name = useSearchParams();
   const dispatch = useAppDispatch();
-
+  const router = useRouter();
   const searchString = useAppSelector((state) => state.mainPage.searchString);
-
   const actionOnNewSearch = () => {
-    //name({
-    //name: searchString.trim(),
-    //page: '1',
-    //});
+    router.push({
+      query: { page:'1', name:searchString },
+    });
   };
 
   function handlerKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {

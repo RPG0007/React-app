@@ -1,4 +1,3 @@
-import './ModalCardContent.css';
 import Spinner from '../../Spinner/Spinner';
 import { useAppSelector } from '../../../store/hooks';
 

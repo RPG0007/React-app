@@ -5,13 +5,28 @@ import ErrorButton from '@/components/ErrorBoundary/ErrorButton/ErrorButton';
 import Search from '@/components/Search/Search';
 import CardsSection from '@/components/CardsSection/CardsSection';
 import { Cards } from '@/types/interfaces';
-import { changeIsCardsLoading } from '@/store/mainPageSlice';
 import Pagination from '@/components/Pagination/Pagination';
+import ModalCard from '@/components/ModalCard/ModalCard';
+import { useSearchParams } from 'next/navigation';
+import { GetServerSidePropsContext } from 'next';
+import { changeAllPage } from '@/store/mainPageSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home(data) {
   const cardsdata: Cards = data.characters.results;
+  const dispatch = useAppDispatch();
+   
+  dispatch(changeAllPage(data.characters.info.pages))
+  const searchParams = useSearchParams();
+   
+  
+  const numPerpage = useAppSelector((state)=>state.mainPage.numPerpage)
+  const queryStringPage: string | null = searchParams.get('page');
+  const initSearchPage: number =
+    queryStringPage && +queryStringPage > 0 ? +queryStringPage : 1;
+ 
   return (
     <>
       <Head>
@@ -25,20 +40,22 @@ export default function Home(data) {
           <Search disabled={false} />
           <ErrorButton />
         </div>
-        <CardsSection cardsdata={cardsdata} />
-         <Pagination currentPage={1}></Pagination>
+        <CardsSection cardsdata={cardsdata.slice(0,numPerpage)} />
+        <Pagination currentPage={initSearchPage}></Pagination>
+        <ModalCard></ModalCard>
       </main>
     </>
   );
 }
 
-export async function getServerSideProps() {
-  const response = await fetch('https://rickandmortyapi.com/api/character/');
-  const data = await response.json();
-  changeIsCardsLoading(false);
-  return {
-    props: {
-      characters: data,
-    },
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { page, name } = context.query;
+    const response = await  fetch(`https://rickandmortyapi.com/api/character/?${page?`page=${page}`:''}${name?`&name=${name}`:''}`)
+    const data = await response.json();
+    return {
+      props: {
+        characters: data,
+      },
+    };
   };
-}
+

@@ -9,7 +9,6 @@ export interface ICard {
   gender: string;
   status: string;
   id: string;
-  getCardModalDescription(id: string): void;
 }
 
 export interface IModalCard {
@@ -54,4 +53,12 @@ export interface IResponseApi {
     prev: string | null;
   };
   results: Cards;
+}
+export interface transformedResponse {
+
+  results: Cards;
+  info:{
+    next: string | null;}
+
+
 }

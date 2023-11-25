@@ -11,13 +11,14 @@
   opacity: 0;
   pointer-events: none;
   transition: all 0.5s;
+  z-index: 1;
 }
-.modal.modal-active {
+.modal.modalActive {
   opacity: 1;
   pointer-events: all;
 }
 
-.modal-card {
+.modalCard {
   width: 500px;
   border-radius: 15px;
   padding: 20px;
@@ -26,21 +27,21 @@
   transition: all 0.4s;
   text-align: start;
 }
-.modal-card h4 {
+.modalCard h4 {
   font-size: 2.4rem;
 }
-.modal-card img {
+.modalCard img {
   display: block;
   margin: 0 auto;
   margin-bottom: 20px;
   position: relative;
 }
 
-.modal-card.modal-card-active {
+.modalCard.modalCardActive {
   transform: scale(1);
 }
 
-.modal-close-button {
+.modalCloseButton {
   font-size: 24px;
   color: red;
   position: fixed;

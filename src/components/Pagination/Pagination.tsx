@@ -1,33 +1,31 @@
 import styles from './Pagination.module.css';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { changeAllPage, changenumPerpage } from '../../store/mainPageSlice';
+import { changenumPerpage } from '../../store/mainPageSlice';
 import { useState } from 'react';
 import { IPagination } from '../../types/interfaces';
 import { useRouter } from 'next/router';
 
 export default function Pagination({ currentPage }: IPagination) {
   const router = useRouter();
-  const {limit,search} = router.query;
-  let {page} = router.query;
+  let { page } = router.query;
   const dispatch = useAppDispatch();
-  
+
   if (!page) {
-    dispatch(changeAllPage(1));
     page = '1';
   }
   const [prevPerpagenumber, setPerPageNumber] = useState(20);
   const searchString = useAppSelector((state) => state.mainPage.searchString);
   const allPage = useAppSelector((state) => state.mainPage.allPage);
 
-  const handleClickPrevPage = () => { 
+  const handleClickPrevPage = () => {
     router.push({
-      query: { limit, page:page?`${+page - 1}`:`1`, search },
+      query: { page: page ? `${+page - 1}` : `1`,  name:searchString?searchString:'' },
     });
   };
 
   const handleClickNextPage = () => {
     router.push({
-      query: { limit, page:page?`${+page + 1}`:`1`, search },
+      query: {page: page ? `${+page + 1}` : `1`, name:searchString?searchString:''},
     });
   };
 

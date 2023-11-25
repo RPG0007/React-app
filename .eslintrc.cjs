@@ -33,7 +33,7 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-function": "error",
     "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-var-requires": "error ",
+    "@typescript-eslint/no-var-requires": "error",
     "@next/next/no-img-element": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
