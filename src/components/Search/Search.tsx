@@ -7,15 +7,15 @@ import { changeSearchString } from '../../store/mainPageSlice';
 import Image from 'next/image';
 
 export default function Search({ disabled }: ISearch) {
- // const name = useSearchParams();
+  // const name = useSearchParams();
   const dispatch = useAppDispatch();
 
   const searchString = useAppSelector((state) => state.mainPage.searchString);
 
   const actionOnNewSearch = () => {
     //name({
-      //name: searchString.trim(),
-      //page: '1',
+    //name: searchString.trim(),
+    //page: '1',
     //});
   };
 
@@ -49,7 +49,7 @@ export default function Search({ disabled }: ISearch) {
         disabled={disabled}
         data-testid={'input-btn'}
       >
-           <Image
+        <Image
           src={searchIcon}
           alt="search icon"
           width={40}

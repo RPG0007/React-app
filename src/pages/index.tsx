@@ -3,10 +3,14 @@ import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import ErrorButton from '@/components/ErrorBoundary/ErrorButton/ErrorButton';
 import Search from '@/components/Search/Search';
+import CardsSection from '@/components/CardsSection/CardsSection';
+import { Cards } from '@/types/interfaces';
+import { changeIsCardsLoading } from '@/store/mainPageSlice';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home() {
+export default function Home(data) {
+  const cardsdata:Cards = data.characters.results
   return (
     <>
       <Head>
@@ -17,13 +21,25 @@ export default function Home() {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <div className={styles.description}>
-        <Search disabled={false}/>
+          <Search disabled={false} />
           <ErrorButton />
         </div>
-
-        <div className={styles.center}>
-        </div>
+        <CardsSection cardsdata={cardsdata}/>
+        <div className={styles.center}></div>
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const response = await fetch(
+    'https://rickandmortyapi.com/api/character/'
+  );
+  const data = await response.json();
+  changeIsCardsLoading(false);
+  return {
+    props: {
+      characters: data,
+    },
+  };
 }
