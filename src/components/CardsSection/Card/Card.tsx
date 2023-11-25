@@ -2,7 +2,6 @@ import styles from './Card.module.css';
 import { ICard } from '../../../types/interfaces';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-
 export default function Card({
   img,
   name,
@@ -25,7 +24,7 @@ export default function Card({
 
   function handlerClick() {
     getCardModalDescription(id);
-     router.push(`${pathname}${initSearchString}${initSearchPage}${id}`)
+    router.push(`${pathname}${initSearchString}${initSearchPage}${id}`);
   }
 
   return (

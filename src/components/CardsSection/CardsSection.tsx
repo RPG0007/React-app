@@ -14,16 +14,16 @@ import {
 import { useLazyGetCardDesctiptionQuery } from '../../store/api';
 import { Cards } from '@/types/interfaces';
 
-export default function CardsSection(props:{cardsdata:Cards}) {
+export default function CardsSection(props: { cardsdata: Cards }) {
   const data = props.cardsdata;
-   
+
   const searchParams = useSearchParams();
 
   const queryStringCard: string | null = searchParams.get('card');
   const initSearchCard: string = queryStringCard ? queryStringCard : '';
 
   const dispatch = useAppDispatch();
-  if(data) dispatch(changeIsCardsLoading(false));
+  if (data) dispatch(changeIsCardsLoading(false));
   const isCardsLoading = useAppSelector(
     (state) => state.mainPage.isCardsLoading
   );
@@ -47,11 +47,8 @@ export default function CardsSection(props:{cardsdata:Cards}) {
   };
 
   useEffect(() => {
-    
-      changeCurrentCards(props.cardsdata);
-
-      
-  }, [props.cardsdata,cards]);
+    changeCurrentCards(props.cardsdata);
+  }, [props.cardsdata, cards]);
 
   useEffect(() => {
     if (initSearchCard) {

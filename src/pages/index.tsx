@@ -6,11 +6,12 @@ import Search from '@/components/Search/Search';
 import CardsSection from '@/components/CardsSection/CardsSection';
 import { Cards } from '@/types/interfaces';
 import { changeIsCardsLoading } from '@/store/mainPageSlice';
+import Pagination from '@/components/Pagination/Pagination';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home(data) {
-  const cardsdata:Cards = data.characters.results
+  const cardsdata: Cards = data.characters.results;
   return (
     <>
       <Head>
@@ -24,17 +25,15 @@ export default function Home(data) {
           <Search disabled={false} />
           <ErrorButton />
         </div>
-        <CardsSection cardsdata={cardsdata}/>
-        <div className={styles.center}></div>
+        <CardsSection cardsdata={cardsdata} />
+         <Pagination currentPage={1}></Pagination>
       </main>
     </>
   );
 }
 
 export async function getServerSideProps() {
-  const response = await fetch(
-    'https://rickandmortyapi.com/api/character/'
-  );
+  const response = await fetch('https://rickandmortyapi.com/api/character/');
   const data = await response.json();
   changeIsCardsLoading(false);
   return {
