@@ -14,7 +14,7 @@ export default function Search({ disabled }: ISearch) {
   const searchString = useAppSelector((state) => state.mainPage.searchString);
   const actionOnNewSearch = () => {
     router.push({
-      query: { page:'1', name:searchString },
+      query: { page: '1', name: searchString },
     });
   };
 

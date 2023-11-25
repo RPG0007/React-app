@@ -19,13 +19,19 @@ export default function Pagination({ currentPage }: IPagination) {
 
   const handleClickPrevPage = () => {
     router.push({
-      query: { page: page ? `${+page - 1}` : `1`,  name:searchString?searchString:'' },
+      query: {
+        page: page ? `${+page - 1}` : `1`,
+        name: searchString ? searchString : '',
+      },
     });
   };
 
   const handleClickNextPage = () => {
     router.push({
-      query: {page: page ? `${+page + 1}` : `1`, name:searchString?searchString:''},
+      query: {
+        page: page ? `${+page + 1}` : `1`,
+        name: searchString ? searchString : '',
+      },
     });
   };
 

@@ -17,16 +17,15 @@ const inter = Inter({ subsets: ['latin'] });
 export default function Home(data) {
   const cardsdata: Cards = data.characters.results;
   const dispatch = useAppDispatch();
-   
-  dispatch(changeAllPage(data.characters.info.pages))
+
+  dispatch(changeAllPage(data.characters.info.pages));
   const searchParams = useSearchParams();
-   
-  
-  const numPerpage = useAppSelector((state)=>state.mainPage.numPerpage)
+
+  const numPerpage = useAppSelector((state) => state.mainPage.numPerpage);
   const queryStringPage: string | null = searchParams.get('page');
   const initSearchPage: number =
     queryStringPage && +queryStringPage > 0 ? +queryStringPage : 1;
- 
+
   return (
     <>
       <Head>
@@ -40,7 +39,7 @@ export default function Home(data) {
           <Search disabled={false} />
           <ErrorButton />
         </div>
-        <CardsSection cardsdata={cardsdata.slice(0,numPerpage)} />
+        <CardsSection cardsdata={cardsdata.slice(0, numPerpage)} />
         <Pagination currentPage={initSearchPage}></Pagination>
         <ModalCard></ModalCard>
       </main>
@@ -50,12 +49,15 @@ export default function Home(data) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { page, name } = context.query;
-    const response = await  fetch(`https://rickandmortyapi.com/api/character/?${page?`page=${page}`:''}${name?`&name=${name}`:''}`)
-    const data = await response.json();
-    return {
-      props: {
-        characters: data,
-      },
-    };
+  const response = await fetch(
+    `https://rickandmortyapi.com/api/character/?${page ? `page=${page}` : ''}${
+      name ? `&name=${name}` : ''
+    }`
+  );
+  const data = await response.json();
+  return {
+    props: {
+      characters: data,
+    },
   };
-
+}

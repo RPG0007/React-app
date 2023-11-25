@@ -9,7 +9,6 @@ export default function ModalCard() {
   const dispatch = useAppDispatch();
 
   function handlerClickModal() {
-     
     dispatch(changeIsModalActive(false));
   }
 
@@ -23,7 +22,9 @@ export default function ModalCard() {
       onClick={handlerClickModal}
     >
       <div
-        className={`${styles.modalCard} ${isModalActive && styles.modalCardActive}`}
+        className={`${styles.modalCard} ${
+          isModalActive && styles.modalCardActive
+        }`}
         onClick={handlerClickModalCard}
       >
         <div

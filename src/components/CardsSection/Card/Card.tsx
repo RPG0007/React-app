@@ -3,7 +3,11 @@ import { ICard } from '../../../types/interfaces';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLazyGetCardDesctiptionQuery } from '@/store/api';
 import { useAppDispatch } from '@/store/hooks';
-import { changeIsModalActive, changeIsModalLoading, changeCardDescription } from '@/store/mainPageSlice';
+import {
+  changeIsModalActive,
+  changeIsModalLoading,
+  changeCardDescription,
+} from '@/store/mainPageSlice';
 
 export default function Card({
   img,
@@ -24,23 +28,23 @@ export default function Card({
   const initSearchPage: number =
     queryStringPage && +queryStringPage > 0 ? +queryStringPage : 1;
 
-    const [triggerFn] = useLazyGetCardDesctiptionQuery();
+  const [triggerFn] = useLazyGetCardDesctiptionQuery();
 
-    const getCardModalDescription = async (cardId: string) => {
-      dispatch(changeIsModalActive(true));
-      dispatch(changeIsModalLoading(true));
-  
-      try {
-        const response = await triggerFn(cardId);
-  
-        dispatch(changeIsModalLoading(false));
-        dispatch(changeCardDescription(response.data));
-      } catch (error) {
-        console.log(error);
-        dispatch(changeIsModalLoading(false));
-        dispatch(changeCardDescription(undefined));
-      }
-    };
+  const getCardModalDescription = async (cardId: string) => {
+    dispatch(changeIsModalActive(true));
+    dispatch(changeIsModalLoading(true));
+
+    try {
+      const response = await triggerFn(cardId);
+
+      dispatch(changeIsModalLoading(false));
+      dispatch(changeCardDescription(response.data));
+    } catch (error) {
+      console.log(error);
+      dispatch(changeIsModalLoading(false));
+      dispatch(changeCardDescription(undefined));
+    }
+  };
   function handlerClick() {
     getCardModalDescription(id);
     router.push(`${pathname}?page=${initSearchPage}&name=${initSearchString}`);
@@ -56,5 +60,3 @@ export default function Card({
     </div>
   );
 }
- 
-

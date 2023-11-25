@@ -8,9 +8,7 @@ export const rickAndMortyApi = createApi({
   endpoints: (builder) => ({
     getResultNewSearch: builder.query<IResponseApi, string>({
       query: (queryString) => `${queryString}`,
-     
-
-  }),
+    }),
     getCardDesctiption: builder.query<ICardDescription, string>({
       query: (queryString) => `${queryString}`,
     }),
@@ -19,5 +17,6 @@ export const rickAndMortyApi = createApi({
 
 export const { useGetResultNewSearchQuery, useLazyGetCardDesctiptionQuery } =
   rickAndMortyApi;
-  
-  export const { getResultNewSearch, getCardDesctiption } = rickAndMortyApi.endpoints;
+
+export const { getResultNewSearch, getCardDesctiption } =
+  rickAndMortyApi.endpoints;
