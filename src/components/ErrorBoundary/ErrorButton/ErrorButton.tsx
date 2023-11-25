@@ -13,7 +13,7 @@ export default function ErrorButton() {
   }
 
   return (
-    <button onClick={handlerClick} className={styles['error-button']}>
+    <button onClick={handlerClick} className={styles.errorButton}>
       Error button
     </button>
   );

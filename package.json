@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint ./src --fix --color",
+    "lint:fix": "next lint --fix",
     "lint-staged": "lint-staged",
     "format:fix": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "postinstall": "husky install",
