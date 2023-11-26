@@ -4,7 +4,7 @@ import { Cards, ICardDescription } from '../types/interfaces';
 
 interface IMainPageState {
   cards: Cards;
-  cardDescription: ICardDescription | undefined;
+  cardDescription: ICardDescription | undefined|null;
   isCardsLoading: boolean;
   isModalActive: boolean;
   isModalLoading: boolean;
@@ -15,7 +15,7 @@ interface IMainPageState {
 
 const initialState: IMainPageState = {
   cards: [],
-  cardDescription: undefined,
+  cardDescription: null,
   isCardsLoading: true,
   isModalActive: false,
   isModalLoading: false,

@@ -57,6 +57,6 @@ export interface IResponseApi {
 export interface transformedResponse {
   results: Cards;
   info: {
-    next: string | null;
+    pages: number;
   };
 }
