@@ -1,6 +1,7 @@
 import styles from './Pagination.module.css';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { changenumPerpage } from '../../store/mainPageSlice';
+import React from 'react';
 import { useState } from 'react';
 import { IPagination } from '../../types/interfaces';
 import { useRouter } from 'next/router';
@@ -41,11 +42,17 @@ export default function Pagination({ currentPage }: IPagination) {
   const handlerKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter') {
       dispatch(changenumPerpage(prevPerpagenumber));
+      router.push({
+        query: {
+          page:`1`,
+          name: searchString ? searchString : '',
+        },
+      });
     }
   };
 
   return (
-    <div className={styles.paginationSection}>
+    <div className={styles.paginationSection} data-testid="pagination">
       <button
         className={`${styles.paginationButton} ${
           currentPage === 1 && 'disabledButton'

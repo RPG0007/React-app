@@ -1,4 +1,5 @@
 import Layout from './layout';
+import React from 'react';
 import { wrapper } from '@/store/store';
 import { getResultNewSearch, rickAndMortyApi } from '@/store/api';
 import { checkRouterElement } from '@/utils/functions';
@@ -20,14 +21,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
       )}&name=${checkRouterElement(name, '')}
       `)
     );
-
+     
     await Promise.all(
       store.dispatch(rickAndMortyApi.util.getRunningQueriesThunk())
     );
-
     return {
       props: {
-        datar: data?.data,
+        datar: data?.data?.results?data.data:{info: {
+          count: 1,
+          pages: 1,
+          next: "https://rickandmortyapi.com/api/character/?page=2",
+          prev: null
+          },
+          results: []}
       },
     };
   }

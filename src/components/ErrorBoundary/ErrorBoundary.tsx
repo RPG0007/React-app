@@ -1,4 +1,5 @@
 import { Component, ErrorInfo } from 'react';
+import React from 'react';
 import { IErrorBoundary, IErrorBoundaryState } from '../../types/interfaces';
 
 export default class ErrorBoundary extends Component<

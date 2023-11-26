@@ -1,4 +1,5 @@
 import styles from './ModalCard.module.css';
+import React from 'react';
 import ModalCardContent from './ModalCardContent/ModalCardContent';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -47,7 +48,7 @@ export default function ModalCard(props: { detailsData: ICardDescription }) {
   return (
     <div
       className={`${styles.modal} ${isModalActive && styles.modalActive}`}
-      onClick={handlerClickModal}
+      onClick={handlerClickModal}   data-testid="modalWindow"
     >
       <div
         className={`${styles.modalCard} ${

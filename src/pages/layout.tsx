@@ -3,7 +3,6 @@ import styles from '@/styles/Home.module.css';
 import React from 'react';
 import { changeAllPage } from '@/store/mainPageSlice';
 import Head from 'next/head';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import ErrorButton from '@/components/ErrorBoundary/ErrorButton/ErrorButton';
@@ -11,6 +10,7 @@ import CardsSection from '@/components/CardsSection/CardsSection';
 import Search from '@/components/Search/Search';
 import Pagination from '@/components/Pagination/Pagination';
 import { Cards, IResponseApi } from '@/types/interfaces';
+import { checkRouterElement } from '@/utils/functions';
 
 type LayoutProps = {
   children?: ReactNode;
@@ -23,12 +23,7 @@ const Layout = ({ children, data }: LayoutProps) => {
   const dispatch = useAppDispatch();
 
   dispatch(changeAllPage(data.info.pages));
-  const searchParams = useSearchParams();
-
   const numPerpage = useAppSelector((state) => state.mainPage.numPerpage);
-  const queryStringPage: string | null = searchParams.get('page');
-  const initSearchPage: number =
-    queryStringPage && +queryStringPage > 0 ? +queryStringPage : 1;
   const router = useRouter();
   const { page, name } = router.query;
   const href = name
@@ -60,13 +55,13 @@ const Layout = ({ children, data }: LayoutProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="/fav_icon.svg" />
       </Head>
-      <main className={`${styles.main}`}>
+      <main className={styles.main}>
         <div className={styles.description} onClick={redirectToMain}>
           <Search disabled={false} />
           <ErrorButton />
         </div>
         <CardsSection cardsdata={cardsdata.slice(0, numPerpage)} />
-        <Pagination currentPage={initSearchPage}></Pagination>
+        <Pagination currentPage={parseInt(checkRouterElement(page,'1'))}></Pagination>
 
         {children}
       </main>

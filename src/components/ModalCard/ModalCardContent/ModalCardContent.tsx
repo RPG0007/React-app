@@ -1,5 +1,6 @@
 import Spinner from '../../Spinner/Spinner';
 import { useAppSelector } from '../../../store/hooks';
+import React from 'react';
 
 export default function ModalCardContent() {
   const cardDescription = useAppSelector(

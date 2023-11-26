@@ -1,14 +1,13 @@
 import styles from './Search.module.css';
 import searchIcon from '../../assets/search.png';
 import { ISearch } from '../../types/interfaces';
-//import { useSearchParams } from 'next/navigation';
+import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { changeSearchString } from '../../store/mainPageSlice';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 export default function Search({ disabled }: ISearch) {
-  // const name = useSearchParams();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchString = useAppSelector((state) => state.mainPage.searchString);

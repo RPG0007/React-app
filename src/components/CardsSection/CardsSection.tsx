@@ -1,5 +1,6 @@
 import Spinner from '../Spinner/Spinner';
 import Card from './Card/Card';
+import React from 'react';
 import NoResultsCards from './NoResultsCards/NoResultsCards';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { changeIsCardsLoading } from '../../store/mainPageSlice';

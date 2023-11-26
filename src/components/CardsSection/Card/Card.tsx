@@ -1,6 +1,8 @@
 import styles from './Card.module.css';
+import React from 'react';
 import { ICard } from '../../../types/interfaces';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 export default function Card({
   img,
@@ -12,18 +14,11 @@ export default function Card({
 }: ICard) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const queryStringSearch: string | null = searchParams.get('name');
-  const initSearchString: string = queryStringSearch ? queryStringSearch : '';
-
-  const queryStringPage: string | null = searchParams.get('page');
-  const initSearchPage: number =
-    queryStringPage && +queryStringPage > 0 ? +queryStringPage : 1;
+  const { page } = router.query;
 
   function handlerClick() {
     router.push(
-      `${pathname}details/${id}?page=${initSearchPage}&name=${initSearchString}`
+      `${pathname}details/${id}?page=${page?page:'1'}&name=${router.query.name?router.query.name:''}`
     );
   }
 

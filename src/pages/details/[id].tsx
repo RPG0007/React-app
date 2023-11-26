@@ -1,4 +1,5 @@
 import Layout from '@/pages/layout';
+import React from 'react';
 import { wrapper } from '@/store/store';
 import {
   rickAndMortyApi,
