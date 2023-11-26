@@ -18,7 +18,7 @@ type LayoutProps = {
 };
 
 const Layout = ({ children, data }: LayoutProps) => {
-  const cardsdata: Cards = data.results;
+  const cardsdata: Cards = data.results?data.results:[];
 
   const dispatch = useAppDispatch();
 
