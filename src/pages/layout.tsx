@@ -61,7 +61,9 @@ const Layout = ({ children, data }: LayoutProps) => {
           <ErrorButton />
         </div>
         <CardsSection cardsdata={cardsdata.slice(0, numPerpage)} />
-        <Pagination currentPage={parseInt(checkRouterElement(page,'1'))}></Pagination>
+        <Pagination
+          currentPage={parseInt(checkRouterElement(page, '1'))}
+        ></Pagination>
 
         {children}
       </main>

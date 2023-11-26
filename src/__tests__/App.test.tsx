@@ -5,7 +5,6 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { describe, expect, test, vi } from 'vitest';
 import { Router } from 'next/router';
- 
 
 const mockRouter: Partial<Router> = {
   route: '/',

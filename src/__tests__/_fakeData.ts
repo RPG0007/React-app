@@ -2,10 +2,10 @@ import { IResponseApi } from '@/types/interfaces';
 
 export const CardRequest: IResponseApi = {
   info: {
-  count: 2,
-  pages: 1,
-  next: "https://rickandmortyapi.com/api/character/?page=2",
-  prev: null
+    count: 2,
+    pages: 1,
+    next: 'https://rickandmortyapi.com/api/character/?page=2',
+    prev: null,
   },
   results: [
     {
@@ -184,7 +184,7 @@ export const CardRequest: IResponseApi = {
       gender: 'Male',
       image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
     },
-]
+  ],
 };
 
 export const propsToCard = {

@@ -14,9 +14,9 @@ test('Make sure the component updates URL query parameter when page changes', as
   mockRouter.setCurrentUrl('/?page=2');
   render(
     <Provider store={store}>
-    <RouterContext.Provider value={mockRouter}>
-      <Home datar={CardRequest} />
-    </RouterContext.Provider>
+      <RouterContext.Provider value={mockRouter}>
+        <Home datar={CardRequest} />
+      </RouterContext.Provider>
     </Provider>
   );
 
@@ -27,7 +27,7 @@ test('Make sure the component updates URL query parameter when page changes', as
   expect(pagination).toBeInTheDocument();
   expect(nextBtn).toBeInTheDocument();
   expect(prevBtn).toBeInTheDocument();
-  expect(mockRouter.query).toEqual({ page: '2'});
+  expect(mockRouter.query).toEqual({ page: '2' });
   await waitFor(() => {
     fireEvent.click(nextBtn);
   });
@@ -35,20 +35,18 @@ test('Make sure the component updates URL query parameter when page changes', as
     fireEvent.click(prevBtn);
   });
   setTimeout(() => {
-    expect(mockRouter.query).toEqual({ page: '1',name:''});
-  }, 200)
-  
+    expect(mockRouter.query).toEqual({ page: '1', name: '' });
+  }, 200);
 });
 
 test('function "new search" currectly work without error', async () => {
-  render(   
+  render(
     <Provider store={store}>
-       <RouterContext.Provider value={mockRouter}> 
-      <Search disabled={false} />
+      <RouterContext.Provider value={mockRouter}>
+        <Search disabled={false} />
       </RouterContext.Provider>
     </Provider>
-);
+  );
 
   fireEvent.click(screen.getByTestId('input-btn'));
 });
-

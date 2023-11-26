@@ -21,19 +21,23 @@ export const getServerSideProps = wrapper.getServerSideProps(
       )}&name=${checkRouterElement(name, '')}
       `)
     );
-     
+
     await Promise.all(
       store.dispatch(rickAndMortyApi.util.getRunningQueriesThunk())
     );
     return {
       props: {
-        datar: data?.data?.results?data.data:{info: {
-          count: 1,
-          pages: 1,
-          next: "https://rickandmortyapi.com/api/character/?page=2",
-          prev: null
-          },
-          results: []}
+        datar: data?.data?.results
+          ? data.data
+          : {
+              info: {
+                count: 1,
+                pages: 1,
+                next: 'https://rickandmortyapi.com/api/character/?page=2',
+                prev: null,
+              },
+              results: [],
+            },
       },
     };
   }

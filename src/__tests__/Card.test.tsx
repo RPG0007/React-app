@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import mockRouter from 'next-router-mock';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
-import { CardRequest , propsToCard, propsToDetails } from './_fakeData';
+import { CardRequest, propsToCard, propsToDetails } from './_fakeData';
 import Card from '@/components/CardsSection/Card/Card';
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -27,8 +27,8 @@ describe('Tests for the Card component', () => {
     render(
       <RouterContext.Provider value={mockRouter}>
         <Card {...propsToCard} />
-        <NoResultsCards/>
-        <Spinner/>
+        <NoResultsCards />
+        <Spinner />
       </RouterContext.Provider>
     );
 
@@ -44,14 +44,13 @@ describe('Tests for the Card component', () => {
   });
 
   test('Validate that clicking on a card opens a detailed card component && Check that clicking triggers an additional API call to fetch detailed information.', async () => {
-     
     mockRouter.setCurrentUrl('/?page=1&name=');
 
     render(
       <Provider store={store}>
-      <RouterContext.Provider value={mockRouter}>
-        <Details datar={CardRequest} detailsdatar={propsToDetails} />
-      </RouterContext.Provider>
+        <RouterContext.Provider value={mockRouter}>
+          <Details datar={CardRequest} detailsdatar={propsToDetails} />
+        </RouterContext.Provider>
       </Provider>
     );
 
@@ -67,12 +66,11 @@ describe('Tests for the Card component', () => {
     await waitFor(() => {
       fireEvent.click(cards[0]);
     });
-   
 
     expect(mockRouter.query).toEqual(
       expect.objectContaining({
-        page:'1',
-        name:''
+        page: '1',
+        name: '',
       })
     );
   });

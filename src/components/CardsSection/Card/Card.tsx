@@ -18,7 +18,9 @@ export default function Card({
 
   function handlerClick() {
     router.push(
-      `${pathname}details/${id}?page=${page?page:'1'}&name=${router.query.name?router.query.name:''}`
+      `${pathname}details/${id}?page=${page ? page : '1'}&name=${
+        router.query.name ? router.query.name : ''
+      }`
     );
   }
 

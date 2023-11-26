@@ -44,7 +44,7 @@ export default function Pagination({ currentPage }: IPagination) {
       dispatch(changenumPerpage(prevPerpagenumber));
       router.push({
         query: {
-          page:`1`,
+          page: `1`,
           name: searchString ? searchString : '',
         },
       });

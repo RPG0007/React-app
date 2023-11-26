@@ -48,7 +48,8 @@ export default function ModalCard(props: { detailsData: ICardDescription }) {
   return (
     <div
       className={`${styles.modal} ${isModalActive && styles.modalActive}`}
-      onClick={handlerClickModal}   data-testid="modalWindow"
+      onClick={handlerClickModal}
+      data-testid="modalWindow"
     >
       <div
         className={`${styles.modalCard} ${

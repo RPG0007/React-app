@@ -17,27 +17,24 @@ describe('Tests for the 404 Page component', () => {
   it('404 page is displayed when navigating to an invalid route.', async () => {
     render(<ErrorPage />);
     expect(screen.getByTestId('404-error-page')).toBeInTheDocument();
-   
   });
-
- 
 
   it('renders snapshot of app component', () => {
     const tree = render(
       <ErrorBoundary>
-      <Provider store={store}> 
-    <Home datar={CardRequest} />
-    </Provider>
-    </ErrorBoundary>)
-    console.log(tree)
-    expect(tree).toMatchSnapshot()
-  })
+        <Provider store={store}>
+          <Home datar={CardRequest} />
+        </Provider>
+      </ErrorBoundary>
+    );
+    console.log(tree);
+    expect(tree).toMatchSnapshot();
+  });
   it('prepares pageProps for component', async () => {
     const context2 = {
-        query: { page:'1',name:"",id: "fjdks" } as ParsedUrlQuery
+      query: { page: '1', name: '', id: 'fjdks' } as ParsedUrlQuery,
     };
-     const value2 =  getServerSideProps(context2 as GetServerSidePropsContext);
-     expect (value2).toBeTruthy();
-
-  })
+    const value2 = getServerSideProps(context2 as GetServerSidePropsContext);
+    expect(value2).toBeTruthy();
+  });
 });

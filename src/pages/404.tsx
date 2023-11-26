@@ -8,7 +8,7 @@ export default function Custom404() {
       height={600}
       width={300}
       alt="404-error img"
-        className="error404img"
+      className="error404img"
       data-testid="404-error-page"
     ></Image>
   );
