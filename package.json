@@ -1,8 +1,5 @@
 {
   "name": "rsschool-react-course",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "https://IrinaPeshko.github.io/RSSchool-react-course",
   "type": "module",
   "scripts": {
     "dev": "next dev --turbo",
