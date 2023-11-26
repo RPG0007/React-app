@@ -13,7 +13,7 @@ export default function Card({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-   
+
   const queryStringSearch: string | null = searchParams.get('name');
   const initSearchString: string = queryStringSearch ? queryStringSearch : '';
 
@@ -21,11 +21,10 @@ export default function Card({
   const initSearchPage: number =
     queryStringPage && +queryStringPage > 0 ? +queryStringPage : 1;
 
-  
-
-  
   function handlerClick() {
-    router.push(`${pathname}details/${id}?page=${initSearchPage}&name=${initSearchString}`);
+    router.push(
+      `${pathname}details/${id}?page=${initSearchPage}&name=${initSearchString}`
+    );
   }
 
   return (

@@ -5,7 +5,7 @@
   "homepage": "https://IrinaPeshko.github.io/RSSchool-react-course",
   "type": "module",
   "scripts": {
-    "dev": "next dev ",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,7 +13,8 @@
     "lint-staged": "lint-staged",
     "format:fix": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "postinstall": "husky install",
-    "deploy": "gh-pages -d build"
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
@@ -28,13 +29,14 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
-    "@testing-library/react": "^14.1.0",
+    "@testing-library/react": "^14.1.2",
     "@types/node": "^20",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/redux-mock-store": "^1.0.6",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.2.0",
     "@vitest/coverage-v8": "^0.34.6",
     "@vitest/ui": "^0.34.6",
     "c8": "^8.0.1",
@@ -49,9 +51,11 @@
     "husky": "^8.0.3",
     "jsdom": "^22.1.0",
     "lint-staged": "^15.0.2",
+    "next-router-mock": "^0.9.10",
     "prettier": "3.0.3",
     "redux-mock-store": "^1.5.4",
-    "typescript": "^5.3.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.0",
     "vitest": "^0.34.6"
   },
   "husky": {

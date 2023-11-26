@@ -9,7 +9,10 @@ export const rickAndMortyApi = createApi({
     getResultNewSearch: builder.query<IResponseApi, string>({
       query: (queryString) => `${queryString}`,
     }),
-    getCardDesctiption: builder.query<{ response: ICardDescription }, { id: string }>({
+    getCardDesctiption: builder.query<
+      { response: ICardDescription },
+      { id: string }
+    >({
       query: ({ id = '' }) => {
         return `${id}`;
       },

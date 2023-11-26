@@ -5,7 +5,6 @@ export default function ModalCardContent() {
   const cardDescription = useAppSelector(
     (state) => state.mainPage.cardDescription
   );
-  
 
   const isModalLoading = useAppSelector(
     (state) => state.mainPage.isModalLoading

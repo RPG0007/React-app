@@ -4,7 +4,7 @@ import { Cards, ICardDescription } from '../types/interfaces';
 
 interface IMainPageState {
   cards: Cards;
-  cardDescription: ICardDescription | undefined|null;
+  cardDescription: ICardDescription | undefined | null;
   isCardsLoading: boolean;
   isModalActive: boolean;
   isModalLoading: boolean;
