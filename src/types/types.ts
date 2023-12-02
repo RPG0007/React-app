@@ -14,6 +14,10 @@ export interface IUncontrolledForm extends IForm {
   picture?: File;
 }
 
+export interface ISubmitForm extends IForm {
+  picture: string;
+}
+
 export type FormField =
   | 'name'
   | 'age'

@@ -9,6 +9,7 @@
   width: 250px;
   display: block;
   margin: 20px auto;
+  min-height: 85px;
 }
 
 .label {
@@ -20,7 +21,7 @@
 .textInput {
   padding: 10px;
   border: 0;
-  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 15px  4px rgba(0, 0, 0, 0.06);
   width: 250px;
 }
 
@@ -41,11 +42,24 @@
 .errorMessage {
   font-size: 12px;
   background-color: rgba(182, 0, 0, 0.232);
-  width: 260px;
+  width: 249px;
   padding: 5px;
   margin: 0 auto;
 }
 
 .fileImage {
   width: 100px;
+}
+
+
+.smallLink{
+  display: block;
+  text-decoration: none;
+  color:#5a5a5a;
+  margin: 10px auto;
+  width: 50%;
+}
+
+.smallLink:hover {
+  text-decoration: underline #5a5a5a;
 }

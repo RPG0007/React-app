@@ -3,10 +3,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { countries, schema } from '../constants/constants';
-import { IForm } from '../types/types';
+import { IForm, ISubmitForm } from '../types/types';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { setData } from '../store/reducers/dataSlice';
 import { convertImage } from '../utils/utils';
+import { Link, useNavigate } from 'react-router-dom';
 
 const HookForm = () => {
   const [imagePreview, setImagePreview] = useState<string>('');
@@ -19,14 +20,15 @@ const HookForm = () => {
     trigger,
     setValue,
   } = useForm({ resolver: yupResolver(schema), mode: 'onChange' });
+  const navigate = useNavigate();
 
   const onSubmitHandler = async (data: IForm) => {
     if (data.picture instanceof File) {
       const base64Image = await convertImage(data.picture);
-      const newData = { ...data, picture: base64Image };
-      const newArrData = [...actualData, newData];
-      console.log(newArrData);
+      const newData: ISubmitForm = { ...data, picture: base64Image };
+      const newArrData: ISubmitForm[] = [newData, ...actualData];
       dispatch(setData(newArrData));
+      navigate('/');
     } else {
       console.error('Invalid picture type');
     }
@@ -214,6 +216,9 @@ const HookForm = () => {
       <div>
         <button type="submit">Submit</button>
       </div>
+      <Link to="/" className={styles.smallLink}>
+        Go to main page
+      </Link>
     </form>
   );
 };

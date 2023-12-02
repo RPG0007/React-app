@@ -1,14 +1,17 @@
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
     <>
-      <header>RSSchool</header>
-      <main>
+      <main className="mainBlock">
         <Outlet />
       </main>
-      <footer>RSSchool</footer>
+      <footer>
+        <Link to="https://rs.school/">
+          <img src="RSS_React_logo.png" alt="logo" width={'200px'} />
+        </Link>
+      </footer>
     </>
   );
 }

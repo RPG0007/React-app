@@ -7,6 +7,7 @@ import { ValidationError } from 'yup';
 import { convertImage } from '../utils/utils';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { setData } from '../store/reducers/dataSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 const UncontrolledForm = () => {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -19,6 +20,7 @@ const UncontrolledForm = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const acceptRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const actualData = useAppSelector((store) => store.data);
 
@@ -28,22 +30,23 @@ const UncontrolledForm = () => {
   const dispatch = useAppDispatch();
 
   async function validateData(data: IUncontrolledForm) {
-    schema
-      .validate(data, { abortEarly: false })
-      .then(() => {
-        setErrors({});
-      })
-      .catch((error) => {
-        if (error instanceof ValidationError) {
-          const validationErrors: Record<string, string> = {};
-          error.inner.forEach((err) => {
-            if (typeof err.path === 'string') {
-              validationErrors[err.path] = err.message;
-            }
-          });
-          setErrors(validationErrors);
+    try {
+      await schema.validateSync(data, { abortEarly: false });
+      return true;
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        const validationErrors: Record<string, string> = {};
+        error.inner.forEach((err) => {
+          if (typeof err.path === 'string') {
+            validationErrors[err.path] = err.message;
+          }
+        });
+        setErrors(validationErrors);
+        if (Object.keys(validationErrors).length === 0) {
+          return false;
         }
-      });
+      }
+    }
   }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,13 +82,13 @@ const UncontrolledForm = () => {
       password: passwordRef.current?.value,
       picture: imageObject,
     };
-    validateData(data);
-    if (Object.keys(errors).length === 0 && data.picture) {
+    const isValidate = await validateData(data);
+    if (isValidate && data.picture) {
       const base64Image = await convertImage(data.picture);
       const newData = { ...data, picture: base64Image };
-      const newArrData = [...actualData, newData];
-      console.log(newArrData);
+      const newArrData = [newData, ...actualData];
       dispatch(setData(newArrData));
+      navigate('/');
     }
   }
 
@@ -285,6 +288,9 @@ const UncontrolledForm = () => {
       <div>
         <button type="submit">Submit</button>
       </div>
+      <Link className={styles.smallLink} to="/">
+        Go to main page
+      </Link>
     </form>
   );
 };

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IForm } from '../../types/types';
+import { ISubmitForm } from '../../types/types';
 
-const initialState: { data: IForm[] } = {
+const initialState: { data: ISubmitForm[] } = {
   data: [],
 };
 
@@ -9,7 +9,7 @@ export const dataSlice = createSlice({
   name: 'Data',
   initialState,
   reducers: {
-    setData(state, action: PayloadAction<IForm[]>) {
+    setData(state, action: PayloadAction<ISubmitForm[]>) {
       state.data = action.payload;
     },
   },
