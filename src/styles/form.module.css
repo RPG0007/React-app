@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Roboto+Condensed&display=swap');
+
+* {
+  font-family: 'PT Serif', serif;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.inputBlock {
+  width: 250px;
+  display: block;
+  margin: 20px auto;
+}
+
+.label {
+  display: block;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.textInput {
+  padding: 10px;
+  border: 0;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  width: 250px;
+}
+
+.radioBlock {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.form {
+  width: 350px;
+  margin: auto;
+  padding: 20px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+}
+
+.errorMessage {
+  font-size: 12px;
+  background-color: rgba(182, 0, 0, 0.232);
+  width: 260px;
+  padding: 5px;
+  margin: 0 auto;
+}
+
+.fileImage {
+  width: 100px;
+}
