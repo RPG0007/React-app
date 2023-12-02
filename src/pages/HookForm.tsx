@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { countries, schema } from '../constants/constants';
 import { IForm } from '../types/types';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { setData } from '../store/reducers/DataSlice';
+import { setData } from '../store/reducers/dataSlice';
+import { convertImage } from '../utils/utils';
 
 const HookForm = () => {
   const [imagePreview, setImagePreview] = useState<string>('');
@@ -19,22 +20,9 @@ const HookForm = () => {
     setValue,
   } = useForm({ resolver: yupResolver(schema), mode: 'onChange' });
 
-  const convertImageToBase64 = (file: File) => {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        resolve(reader.result as string);
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
   const onSubmitHandler = async (data: IForm) => {
     if (data.picture instanceof File) {
-      const base64Image = await convertImageToBase64(data.picture);
+      const base64Image = await convertImage(data.picture);
       const newData = { ...data, picture: base64Image };
       const newArrData = [...actualData, newData];
       console.log(newArrData);

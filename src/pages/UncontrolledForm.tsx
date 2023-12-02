@@ -4,6 +4,9 @@ import styles from '../styles/form.module.css';
 import { schema } from '../constants/constants';
 import { FormField, IUncontrolledForm } from '../types/types';
 import { ValidationError } from 'yup';
+import { convertImage } from '../utils/utils';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { setData } from '../store/reducers/dataSlice';
 
 const UncontrolledForm = () => {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -17,9 +20,12 @@ const UncontrolledForm = () => {
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const acceptRef = useRef<HTMLInputElement>(null);
 
+  const actualData = useAppSelector((store) => store.data);
+
   const [errors, setErrors] = useState<IUncontrolledForm>({});
   const [imagePreview, setImagePreview] = useState<string>('');
   const [imageObject, setImageObject] = useState<File>();
+  const dispatch = useAppDispatch();
 
   async function validateData(data: IUncontrolledForm) {
     schema
@@ -56,7 +62,7 @@ const UncontrolledForm = () => {
     });
   };
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data: IUncontrolledForm = {
       accept: acceptRef.current?.checked,
@@ -74,8 +80,12 @@ const UncontrolledForm = () => {
       picture: imageObject,
     };
     validateData(data);
-    if (Object.keys(errors).length === 0) {
-      console.log(data);
+    if (Object.keys(errors).length === 0 && data.picture) {
+      const base64Image = await convertImage(data.picture);
+      const newData = { ...data, picture: base64Image };
+      const newArrData = [...actualData, newData];
+      console.log(newArrData);
+      dispatch(setData(newArrData));
     }
   }
 
