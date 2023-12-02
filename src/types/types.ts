@@ -3,23 +3,15 @@ export interface IForm {
   age?: number;
   gender?: 'male' | 'female';
   country?: string;
-  picture?: unknown;
+  picture?: unknown | File;
   email?: string;
   password?: string;
   confirmPassword?: string;
   accept?: boolean;
 }
 
-export interface IUncontrolledForm {
-  name?: string;
-  age?: number;
-  gender?: 'male' | 'female';
-  country?: string;
+export interface IUncontrolledForm extends IForm {
   picture?: File;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  accept?: boolean;
 }
 
 export type FormField =

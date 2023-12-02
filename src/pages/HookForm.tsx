@@ -4,10 +4,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { countries, schema } from '../constants/constants';
 import { IForm } from '../types/types';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { setData } from '../store/reducers/DataSlice';
 
 const HookForm = () => {
   const [imagePreview, setImagePreview] = useState<string>('');
-
+  const dispatch = useAppDispatch();
+  const actualData = useAppSelector((store) => store.data);
   const {
     register,
     handleSubmit,
@@ -16,9 +19,26 @@ const HookForm = () => {
     setValue,
   } = useForm({ resolver: yupResolver(schema), mode: 'onChange' });
 
-  const onSubmitHandler = (data: IForm) => {
-    if (data.picture instanceof File || typeof data.picture === 'undefined') {
-      console.log('Valid data:', data);
+  const convertImageToBase64 = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const onSubmitHandler = async (data: IForm) => {
+    if (data.picture instanceof File) {
+      const base64Image = await convertImageToBase64(data.picture);
+      const newData = { ...data, picture: base64Image };
+      const newArrData = [...actualData, newData];
+      console.log(newArrData);
+      dispatch(setData(newArrData));
     } else {
       console.error('Invalid picture type');
     }
@@ -121,6 +141,11 @@ const HookForm = () => {
             })}
           </datalist>
         </div>
+        {errors.country && (
+          <p className={`${styles.errorMessage} ${styles.show}`}>
+            {errors.country.message}
+          </p>
+        )}
       </div>
 
       <div className={styles.inputBlock}>
