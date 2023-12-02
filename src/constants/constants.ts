@@ -14,9 +14,10 @@ export const schema = yup.object().shape({
     .string()
     .oneOf(['male', 'female'])
     .required('Choose the gender, this is required'),
-  country: yup.string().required(),
+  country: yup.string().required('Country is a required field'),
   picture: yup
     .mixed()
+    .required('Image is a required field')
     .test(
       'fileType',
       'Invalid file type, only JPEG and PNG are allowed',

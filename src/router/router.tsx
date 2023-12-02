@@ -10,7 +10,7 @@ const routes = [
     element: <App />,
     children: [
       {
-        path: 'profile',
+        path: '/',
         element: <MainPage />,
       },
       {
@@ -26,6 +26,6 @@ const routes = [
 ];
 
 const router = createBrowserRouter(routes, {
-  basename: '/React-app',
+  basename: '/RSSchool-react-course',
 });
 export default router;
