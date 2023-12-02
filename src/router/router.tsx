@@ -26,6 +26,6 @@ const routes = [
 ];
 
 const router = createBrowserRouter(routes, {
-  basename: '/RSSchool-react-course',
+  basename: '/React-app',
 });
 export default router;
