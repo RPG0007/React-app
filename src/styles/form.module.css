@@ -10,10 +10,14 @@
   flex-wrap: wrap;
 }
 .inputBlock {
-  width: 50%;
+  width:  50%;
   display: block;
   margin: 20px auto;
   min-height: 85px;
+}
+
+.passwordBlock.inputBlock {
+  min-height: 150px;
 }
 
 .label {
@@ -59,14 +63,6 @@
   width: 100px;
 }
 
-.submitButton{
-  width: 15%;
-  height: 40px;
-  font-size: 24px;
-  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
-  background-color: rgb(163, 233, 141);
-  border-radius: 10px;
-}
 
 .smallLink{
   display: block;
@@ -78,4 +74,23 @@
 
 .smallLink:hover {
   text-decoration: underline #5a5a5a;
+}
+
+.submitBtn{
+  width: 15%;
+  height: 40px;
+  font-size: 24px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  background-color: rgb(163, 233, 141);
+  border-radius: 10px;
+}
+
+.submitBtn:hover {
+  box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.submitBtn:disabled {
+  background-color: rgb(248, 133, 118);
+  cursor: pointer;
 }

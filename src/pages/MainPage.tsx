@@ -1,17 +1,18 @@
 import styles from '../styles/main.module.css';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../store/store';
-import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { useEffect } from 'react';
+import { setLastElement } from '../store/reducers/dataSlice';
+import FormFields from '../components/FormFields';
 
 const MainPage = () => {
+  const dispatch = useAppDispatch();
   const data = useAppSelector((store) => store.data);
-  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (data.length > 0) {
-      setHighlightedIndex(0);
       const timeoutId = setTimeout(() => {
-        setHighlightedIndex(null);
+        dispatch(setLastElement({ boxShadow: '' }));
       }, 3000);
 
       return () => clearTimeout(timeoutId);
@@ -20,7 +21,7 @@ const MainPage = () => {
 
   return (
     <>
-      <h1>Choose the form:</h1>
+      <h1>Choose Form Type:</h1>
       <nav>
         <Link to="/hookForm" className={styles.link}>
           Hook form
@@ -30,45 +31,9 @@ const MainPage = () => {
         </Link>
       </nav>
       {data.length ? (
-        data.map((el, i) => (
-          <div
-            key={i}
-            className={`${styles.card} ${
-              highlightedIndex === i ? styles.highlighted : ''
-            }`}
-          >
-            <div className={styles.content}>
-              <p className={styles.cardField}>
-                <b>Name:</b> {el.name}
-              </p>
-              <p className={styles.cardField}>
-                <b>Age:</b> {el.age}
-              </p>
-              <p className={styles.cardField}>
-                <b>Gender: </b>
-                {el.gender}
-              </p>
-              <p className={styles.cardField}>
-                <b>Country:</b> {el.country}
-              </p>
-              <p className={styles.cardField}>
-                <b>Email:</b> {el.email}
-              </p>
-              <p className={styles.cardField}>
-                <b>Password:</b> {el.password}
-              </p>
-              <p className={styles.cardField}>
-                <b>Password confirmation:</b> {el.confirmPassword}
-              </p>
-              <p className={styles.cardField}>
-                <b>accept:</b> {String(el.accept)}
-              </p>
-            </div>
-            <div className={styles.imgBlock}>
-              <img src={el.picture} alt="photo" />
-            </div>
-          </div>
-        ))
+        data.map((el, i) => {
+          return <FormFields key={i} el={el} i={i} highlightedIndex={0} />;
+        })
       ) : (
         <div className={styles.emptyBlock}>
           <div>

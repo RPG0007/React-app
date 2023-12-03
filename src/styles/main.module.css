@@ -20,6 +20,8 @@
 }
 
 .link {
+  align-self: center;
+  justify-self: center;
   text-decoration: none;
   margin: 30px;
   padding: 15px;

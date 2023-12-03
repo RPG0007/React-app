@@ -18,7 +18,7 @@ export interface ISubmitForm extends IForm {
   picture: string;
 }
 
-export type FormField =
+export type FormFieldKeys =
   | 'name'
   | 'age'
   | 'gender'

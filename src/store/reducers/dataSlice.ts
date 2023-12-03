@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ISubmitForm } from '../../types/types';
 
-const initialState: { data: ISubmitForm[]; countries: string[] } = {
+const initialState: {
+  data: ISubmitForm[];
+  countries: string[];
+  borderStyle: { boxShadow: string };
+} = {
   data: [],
   countries: [
     'Afghanistan',
@@ -242,6 +246,9 @@ const initialState: { data: ISubmitForm[]; countries: string[] } = {
     'Zambia',
     'Zimbabwe',
   ],
+  borderStyle: {
+    boxShadow: '0 0 20px 10px rgba(34, 255, 0, 0.3)',
+  },
 };
 
 export const dataSlice = createSlice({
@@ -254,8 +261,11 @@ export const dataSlice = createSlice({
     setCountries(state, action: PayloadAction<string[]>) {
       state.countries = action.payload;
     },
+    setLastElement(state, action: PayloadAction<{ boxShadow: string }>) {
+      state.borderStyle = action.payload;
+    },
   },
 });
 
 export default dataSlice.reducer;
-export const { setData } = dataSlice.actions;
+export const { setData, setLastElement } = dataSlice.actions;
