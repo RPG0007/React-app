@@ -8,6 +8,9 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 import { setData } from '../store/reducers/dataSlice';
 import { convertImage } from '../utils/utils';
 import { Link, useNavigate } from 'react-router-dom';
+import PasswordStrength, {
+  getPasswordStrength,
+} from '../components/PasswordStrength';
 
 const HookForm = () => {
   const [ShowImage, setShowImage] = useState<string>('');
@@ -22,6 +25,7 @@ const HookForm = () => {
     setValue,
   } = useForm({ resolver: yupResolver(schema), mode: 'onChange' });
   const navigate = useNavigate();
+  const [passwordStrengthValue, setPasswordStrengthValue] = useState<number>(0);
 
   const onSubmitHandler = async (data: IForm) => {
     if (data.picture instanceof File) {
@@ -42,6 +46,14 @@ const HookForm = () => {
       setValue('picture', file);
       trigger('picture');
     }
+  };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const password = event.target.value;
+    const strength = getPasswordStrength(password);
+    setPasswordStrengthValue(strength);
+    setValue('password', password);
+    trigger('password');
   };
 
   return (
@@ -181,14 +193,17 @@ const HookForm = () => {
           </label>
           <input
             className={styles.textInput}
-            {...register('password')}
             id="password"
+            onChange={(e) => {
+              handlePasswordChange(e);
+            }}
           />
           {errors.password && (
             <p className={`${styles.errorMessage} ${styles.show}`}>
               {errors.password.message}
             </p>
           )}
+          <PasswordStrength strength={passwordStrengthValue} />
         </div>
 
         <div className={styles.inputBlock}>
@@ -221,11 +236,9 @@ const HookForm = () => {
 
       <div>
         {isValid ? (
-          <button className={styles.submitButton} type="submit">
-            Submit
-          </button>
+          <button type="submit">Submit</button>
         ) : (
-          <button className={styles.submitButton} type="submit" disabled>
+          <button type="submit" disabled>
             Submit
           </button>
         )}

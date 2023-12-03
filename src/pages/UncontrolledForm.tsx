@@ -7,6 +7,9 @@ import { convertImage } from '../utils/utils';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { setData } from '../store/reducers/dataSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import PasswordStrength, {
+  getPasswordStrength,
+} from '../components/PasswordStrength';
 
 const UncontrolledForm = () => {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -27,6 +30,7 @@ const UncontrolledForm = () => {
   const countries = useAppSelector((store) => store.countries);
   const [ShowImage, setShowImage] = useState<string>('');
   const [imageObject, setImageObject] = useState<File>();
+  const [passwordStrengthValue, setPasswordStrengthValue] = useState<number>(0);
   const dispatch = useAppDispatch();
 
   async function validateData(data: IUncontrolledForm) {
@@ -57,6 +61,11 @@ const UncontrolledForm = () => {
     }
   };
 
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleInputChange('password');
+    const value = getPasswordStrength(event.target.value);
+    setPasswordStrengthValue(value);
+  };
   const handleInputChange = (fieldName: FormField) => {
     setErrors((prevErrors) => {
       const updatedErrors = { ...prevErrors };
@@ -243,13 +252,14 @@ const UncontrolledForm = () => {
             className={styles.textInput}
             id="password"
             ref={passwordRef}
-            onChange={() => handleInputChange('password')}
+            onChange={(e) => handlePasswordChange(e)}
           />
           {errors.password && (
             <p className={`${styles.errorMessage} ${styles.show}`}>
               {errors['password']}
             </p>
           )}
+          <PasswordStrength strength={passwordStrengthValue} />
         </div>
 
         <div className={styles.inputBlock}>
@@ -287,9 +297,7 @@ const UncontrolledForm = () => {
       </div>
 
       <div>
-        <button className={styles.submitButton} type="submit">
-          Submit
-        </button>
+        <button type="submit">Submit</button>
       </div>
       <Link className={styles.smallLink} to="/">
         Go to main page
