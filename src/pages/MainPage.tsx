@@ -20,7 +20,7 @@ const MainPage = () => {
 
   return (
     <>
-      <h1>Choose the form:</h1>
+      <h1>Choose Form Type:</h1>
       <nav>
         <Link to="/hookForm" className={styles.link}>
           Hook form
@@ -61,7 +61,7 @@ const MainPage = () => {
                 <b>Password confirmation:</b> {el.confirmPassword}
               </p>
               <p className={styles.cardField}>
-                <b>accept:</b> {String(el.accept)}
+                <b>Accepted TOS:</b> {String(el.accept)}
               </p>
             </div>
             <div className={styles.imgBlock}>

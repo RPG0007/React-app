@@ -25,7 +25,7 @@ const UncontrolledForm = () => {
   const actualData = useAppSelector((store) => store.data);
 
   const [errors, setErrors] = useState<IUncontrolledForm>({});
-  const [imagePreview, setImagePreview] = useState<string>('');
+  const [ShowImage, setShowImage] = useState<string>('');
   const [imageObject, setImageObject] = useState<File>();
   const dispatch = useAppDispatch();
 
@@ -52,7 +52,7 @@ const UncontrolledForm = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0] instanceof File) {
       const file = event.target.files[0];
-      setImagePreview(URL.createObjectURL(file));
+      setShowImage(URL.createObjectURL(file));
       setImageObject(file);
     }
   };
@@ -97,180 +97,181 @@ const UncontrolledForm = () => {
       <h1>Uncontrolled Form</h1>
       <h2>Lets sign you in.</h2>
 
-      <div className={styles.inputBlock}>
-        <label className={styles.label} htmlFor="name">
-          Name
-        </label>
-        <input
-          className={styles.textInput}
-          id="name"
-          ref={nameRef}
-          onChange={() => handleInputChange('name')}
-        />
-        {errors.name && (
-          <p className={`${styles.errorMessage} ${styles.show}`}>
-            {errors['name']}
-          </p>
-        )}
-      </div>
-
-      <div className={styles.inputBlock}>
-        <label className={styles.label} htmlFor="age">
-          Age
-        </label>
-        <input
-          className={styles.textInput}
-          id="age"
-          type="number"
-          ref={ageRef}
-          onChange={() => handleInputChange('age')}
-        />
-        {errors.age && (
-          <p className={`${styles.errorMessage} ${styles.show}`}>
-            {errors['age']}
-          </p>
-        )}
-      </div>
-
-      <div className={styles.inputBlock}>
-        <p className={styles.label}>Gender:</p>
-        <div className={styles.radioBlock}>
-          <div className={styles.maleBlock}>
-            <input
-              type="radio"
-              id="male"
-              name="gender"
-              value="male"
-              ref={maleRef}
-              onChange={() => handleInputChange('gender')}
-            />
-            <label className={styles.labelRadio} htmlFor="male">
-              Male
-            </label>
-          </div>
-
-          <div className={styles.maleBlock}>
-            <input
-              type="radio"
-              id="female"
-              name="gender"
-              value="female"
-              ref={femaleRef}
-              onChange={() => handleInputChange('gender')}
-            />
-            <label className={styles.labelRadio} htmlFor="female">
-              Female
-            </label>
-          </div>
-        </div>
-        {errors.gender && (
-          <p className={`${styles.errorMessage} ${styles.show}`}>
-            {errors['gender']}
-          </p>
-        )}
-      </div>
-
-      <div className={styles.inputBlock}>
-        <label className={styles.label} htmlFor="country">
-          Country
-        </label>
-        <div>
+      <div className={styles.inputsBlock}>
+        <div className={styles.inputBlock}>
+          <label className={styles.label} htmlFor="name">
+            Name
+          </label>
           <input
             className={styles.textInput}
-            list="countries"
-            name="country"
-            id="country"
-            ref={countryRef}
-            onChange={() => handleInputChange('country')}
+            id="name"
+            ref={nameRef}
+            onChange={() => handleInputChange('name')}
           />
-          <datalist id="countries">
-            {countries.map((el, i) => {
-              return <option key={i} value={el} />;
-            })}
-          </datalist>
+          {errors.name && (
+            <p className={`${styles.errorMessage} ${styles.show}`}>
+              {errors['name']}
+            </p>
+          )}
         </div>
-        {errors.gender && (
-          <p className={`${styles.errorMessage} ${styles.show}`}>
-            {errors['country']}
-          </p>
-        )}
-      </div>
 
-      <div className={styles.inputBlock}>
-        <label className={styles.label} htmlFor="picture">
-          Picture
-        </label>
-        <input
-          id="picture"
-          type="file"
-          ref={imageRef}
-          onChange={(e) => {
-            handleFileChange(e);
-            handleInputChange('picture');
-          }}
-        />
-        {imagePreview && (
-          <img className={styles.fileImage} src={imagePreview} alt="Preview" />
-        )}
-        {errors.picture && typeof errors.picture === 'string' && (
-          <p className={`${styles.errorMessage}`}>{errors.picture}</p>
-        )}
-      </div>
+        <div className={styles.inputBlock}>
+          <label className={styles.label} htmlFor="age">
+            Age
+          </label>
+          <input
+            className={styles.textInput}
+            id="age"
+            type="number"
+            ref={ageRef}
+            onChange={() => handleInputChange('age')}
+          />
+          {errors.age && (
+            <p className={`${styles.errorMessage} ${styles.show}`}>
+              {errors['age']}
+            </p>
+          )}
+        </div>
 
-      <div className={styles.inputBlock}>
-        <label className={styles.label} htmlFor="email">
-          Email
-        </label>
-        <input
-          className={styles.textInput}
-          id="email"
-          ref={emailRef}
-          onChange={() => handleInputChange('email')}
-        />
-        {errors.email && (
-          <p className={`${styles.errorMessage} ${styles.show}`}>
-            {errors['email']}
-          </p>
-        )}
-      </div>
+        <div className={styles.inputBlock}>
+          <p className={styles.label}>Gender:</p>
+          <div className={styles.radioBlock}>
+            <div className={styles.maleBlock}>
+              <input
+                type="radio"
+                id="male"
+                name="gender"
+                value="male"
+                ref={maleRef}
+                onChange={() => handleInputChange('gender')}
+              />
+              <label className={styles.labelRadio} htmlFor="male">
+                Male
+              </label>
+            </div>
 
-      <div className={styles.inputBlock}>
-        <label className={styles.label} htmlFor="password">
-          Password
-        </label>
-        <input
-          className={styles.textInput}
-          id="password"
-          ref={passwordRef}
-          onChange={() => handleInputChange('password')}
-        />
-        {errors.password && (
-          <p className={`${styles.errorMessage} ${styles.show}`}>
-            {errors['password']}
-          </p>
-        )}
-      </div>
+            <div className={styles.maleBlock}>
+              <input
+                type="radio"
+                id="female"
+                name="gender"
+                value="female"
+                ref={femaleRef}
+                onChange={() => handleInputChange('gender')}
+              />
+              <label className={styles.labelRadio} htmlFor="female">
+                Female
+              </label>
+            </div>
+          </div>
+          {errors.gender && (
+            <p className={`${styles.errorMessage} ${styles.show}`}>
+              {errors['gender']}
+            </p>
+          )}
+        </div>
 
-      <div className={styles.inputBlock}>
-        <label className={styles.label} htmlFor="confirmPassword">
-          Confirm password
-        </label>
-        <input
-          className={styles.textInput}
-          id="confirmPassword"
-          ref={confirmPasswordRef}
-          onChange={() => handleInputChange('confirmPassword')}
-        />
-        {errors.confirmPassword && (
-          <p className={`${styles.errorMessage} ${styles.show}`}>
-            {errors['confirmPassword']}
-          </p>
-        )}
-      </div>
+        <div className={styles.inputBlock}>
+          <label className={styles.label} htmlFor="country">
+            Country
+          </label>
+          <div>
+            <input
+              className={styles.textInput}
+              list="countries"
+              name="country"
+              id="country"
+              ref={countryRef}
+              onChange={() => handleInputChange('country')}
+            />
+            <datalist id="countries">
+              {countries.map((el, i) => {
+                return <option key={i} value={el} />;
+              })}
+            </datalist>
+          </div>
+          {errors.gender && (
+            <p className={`${styles.errorMessage} ${styles.show}`}>
+              {errors['country']}
+            </p>
+          )}
+        </div>
 
+        <div className={styles.inputBlock}>
+          <label className={styles.label} htmlFor="picture">
+            Picture
+          </label>
+          <input
+            id="picture"
+            type="file"
+            ref={imageRef}
+            onChange={(e) => {
+              handleFileChange(e);
+              handleInputChange('picture');
+            }}
+          />
+          {ShowImage && (
+            <img className={styles.fileImage} src={ShowImage} alt="Preview" />
+          )}
+          {errors.picture && typeof errors.picture === 'string' && (
+            <p className={`${styles.errorMessage}`}>{errors.picture}</p>
+          )}
+        </div>
+
+        <div className={styles.inputBlock}>
+          <label className={styles.label} htmlFor="email">
+            Email
+          </label>
+          <input
+            className={styles.textInput}
+            id="email"
+            ref={emailRef}
+            onChange={() => handleInputChange('email')}
+          />
+          {errors.email && (
+            <p className={`${styles.errorMessage} ${styles.show}`}>
+              {errors['email']}
+            </p>
+          )}
+        </div>
+
+        <div className={styles.inputBlock}>
+          <label className={styles.label} htmlFor="password">
+            Password
+          </label>
+          <input
+            className={styles.textInput}
+            id="password"
+            ref={passwordRef}
+            onChange={() => handleInputChange('password')}
+          />
+          {errors.password && (
+            <p className={`${styles.errorMessage} ${styles.show}`}>
+              {errors['password']}
+            </p>
+          )}
+        </div>
+
+        <div className={styles.inputBlock}>
+          <label className={styles.label} htmlFor="confirmPassword">
+            Confirm password
+          </label>
+          <input
+            className={styles.textInput}
+            id="confirmPassword"
+            ref={confirmPasswordRef}
+            onChange={() => handleInputChange('confirmPassword')}
+          />
+          {errors.confirmPassword && (
+            <p className={`${styles.errorMessage} ${styles.show}`}>
+              {errors['confirmPassword']}
+            </p>
+          )}
+        </div>
+      </div>
       <div className={styles.inputBlock}>
         <label className={styles.checkboxLabel} htmlFor="accept">
-          I agree to the terms of service
+          I agree to the Terms of Service
         </label>
         <input
           id="accept"
@@ -286,7 +287,9 @@ const UncontrolledForm = () => {
       </div>
 
       <div>
-        <button type="submit">Submit</button>
+        <button className={styles.submitButton} type="submit">
+          Submit
+        </button>
       </div>
       <Link className={styles.smallLink} to="/">
         Go to main page
