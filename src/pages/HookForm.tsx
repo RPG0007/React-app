@@ -2,7 +2,7 @@ import styles from '../styles/form.module.css';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
-import { countries, schema } from '../constants/constants';
+import { schema } from '../utils/yup';
 import { IForm, ISubmitForm } from '../types/types';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { setData } from '../store/reducers/dataSlice';
@@ -13,10 +13,11 @@ const HookForm = () => {
   const [ShowImage, setShowImage] = useState<string>('');
   const dispatch = useAppDispatch();
   const actualData = useAppSelector((store) => store.data);
+  const countries = useAppSelector((store) => store.countries);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     trigger,
     setValue,
   } = useForm({ resolver: yupResolver(schema), mode: 'onChange' });
@@ -219,9 +220,15 @@ const HookForm = () => {
       </div>
 
       <div>
-        <button className={styles.submitButton} type="submit">
-          Submit
-        </button>
+        {isValid ? (
+          <button className={styles.submitButton} type="submit">
+            Submit
+          </button>
+        ) : (
+          <button className={styles.submitButton} type="submit" disabled>
+            Submit
+          </button>
+        )}
       </div>
       <Link to="/" className={styles.smallLink}>
         Go to main page
